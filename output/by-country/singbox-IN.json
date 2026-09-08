@@ -6,18 +6,16 @@
       "tag": "select",
       "outbounds": [
         "auto",
-        "🇮🇳 印度 (India) 01 - xiaohe",
-        "🇮🇳 印度 (India) 02 - xiaohe",
-        "🇮🇳 印度 (India) 03 - xiaohe"
+        "🇮🇳 印度 (India) 01 - mrjxyz",
+        "🇮🇳 印度 (India) 02 - mrjxyz"
       ]
     },
     {
       "type": "urltest",
       "tag": "auto",
       "outbounds": [
-        "🇮🇳 印度 (India) 01 - xiaohe",
-        "🇮🇳 印度 (India) 02 - xiaohe",
-        "🇮🇳 印度 (India) 03 - xiaohe"
+        "🇮🇳 印度 (India) 01 - mrjxyz",
+        "🇮🇳 印度 (India) 02 - mrjxyz"
       ],
       "url": "https://www.google.com/generate_204"
     },
