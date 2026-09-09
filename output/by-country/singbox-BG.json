@@ -6,16 +6,14 @@
       "tag": "select",
       "outbounds": [
         "auto",
-        "🇧🇬 BG 01 - mrjxyz",
-        "🇧🇬 BG 02 - mrjxyz"
+        "🇧🇬 BG 01 - mrjxyz"
       ]
     },
     {
       "type": "urltest",
       "tag": "auto",
       "outbounds": [
-        "🇧🇬 BG 01 - mrjxyz",
-        "🇧🇬 BG 02 - mrjxyz"
+        "🇧🇬 BG 01 - mrjxyz"
       ],
       "url": "https://www.google.com/generate_204"
     },
