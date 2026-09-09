@@ -23,7 +23,7 @@ proxies:
   ws-opts:
     path: /vless/
     headers:
-      Host: 57.131.32.191
+      Host: ov-italy1.09vpn.com
 - name: 🇮🇹 意大利 (Italy) 03 - mrjxyz
   type: vless
   server: 204.216.216.23
@@ -36,7 +36,7 @@ proxies:
   type: vless
   server: 57.131.32.191
   port: 80
-  uuid: 1e280316-0408-47c4-b058-05b8f1f17f02
+  uuid: 049e56d8-0ba0-49e3-b764-ee04122b9f00
   udp: true
   tls: false
   skip-cert-verify: true
@@ -47,27 +47,52 @@ proxies:
       Host: ov-italy1.09vpn.com
 - name: 🇮🇹 意大利 (Italy) 05 - mrjxyz
   type: vless
-  server: 204.216.216.23
-  port: 10086
-  uuid: 9f0285ee-20ca-4953-bcdb-86a920652923
-  udp: true
-  tls: false
-  skip-cert-verify: true
-- name: 🇮🇹 意大利 (Italy) 06 - mrjxyz
-  type: vless
-  server: milan.adaspoloandco.com
-  port: 8443
-  uuid: 69ac162b-1643-4acb-9f49-09d8b0fad609
+  server: 158.180.231.216
+  port: 443
+  uuid: b585dc5e-55bf-4a8b-913a-27c9ccac05c3
   udp: true
   tls: true
   skip-cert-verify: true
-  servername: milan.adaspoloandco.com
+  servername: bab-6.site
   network: ws
   ws-opts:
-    path: /RoBeRt
+    path: /vws/
     headers:
-      Host: milan.adaspoloandco.com
+      Host: bab-6.site
+- name: 🇮🇹 意大利 (Italy) 06 - mrjxyz
+  type: ss
+  server: 57.131.48.45
+  port: 8388
+  cipher: aes-256-gcm
+  password: itzvpn@321
+  udp: true
 - name: 🇮🇹 意大利 (Italy) 07 - mrjxyz
+  type: vless
+  server: 57.131.32.191
+  port: 80
+  uuid: 1e280316-0408-47c4-b058-05b8f1f17f02
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /vless/
+    headers:
+      Host: OV-Italy1.09vpn.com
+- name: 🇮🇹 意大利 (Italy) 08 - mrjxyz
+  type: vless
+  server: 57.131.32.191
+  port: 80
+  uuid: 1e280316-0408-47c4-b058-05b8f1f17f02
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /vless/
+    headers:
+      Host: 57.131.32.191
+- name: 🇮🇹 意大利 (Italy) 09 - mrjxyz
   type: vless
   server: 57.131.32.191
   port: 80
@@ -80,21 +105,21 @@ proxies:
     path: /vless/
     headers:
       Host: 57.131.32.191
-- name: 🇮🇹 意大利 (Italy) 08 - mrjxyz
+- name: 🇮🇹 意大利 (Italy) 10 - mrjxyz
   type: vless
-  server: 158.180.231.216
+  server: 104.21.33.59
   port: 443
-  uuid: b585dc5e-55bf-4a8b-913a-27c9ccac05c3
+  uuid: 44eae030-290b-4083-8102-6f8bab05701b
   udp: true
   tls: true
   skip-cert-verify: true
-  servername: bab-6.site
+  servername: cfvvv-ev1.pages.dev
   network: ws
   ws-opts:
-    path: /vws/
+    path: /
     headers:
-      Host: bab-6.site
-- name: 🇮🇹 意大利 (Italy) 09 - mrjxyz
+      Host: cfvvv-ev1.pages.dev
+- name: 🇮🇹 意大利 (Italy) 11 - mrjxyz
   type: vless
   server: 57.131.32.191
   port: 80
@@ -107,57 +132,7 @@ proxies:
     path: /vless/
     headers:
       Host: 57.131.32.191
-- name: 🇮🇹 意大利 (Italy) 10 - mrjxyz
-  type: vless
-  server: 158.180.231.216
-  port: 443
-  uuid: b585dc5e-55bf-4a8b-913a-27c9ccac05c3
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: bab-6.site
-  network: ws
-  ws-opts:
-    path: /vws/
-    headers:
-      Host: bab-6.site
-- name: 🇮🇹 意大利 (Italy) 11 - mrjxyz
-  type: vmess
-  server: 57.131.32.191
-  port: 8443
-  uuid: 848af33c-81f2-40c9-93b2-4681d056936b
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: OV-Italy1.09vpn.com
-  network: ws
-  ws-opts:
-    path: /vmess/
-    headers:
-      Host: OV-Italy1.09vpn.com
 - name: 🇮🇹 意大利 (Italy) 12 - mrjxyz
-  type: ss
-  server: 57.131.48.45
-  port: 8388
-  cipher: aes-256-gcm
-  password: itzvpn@321
-  udp: true
-- name: 🇮🇹 意大利 (Italy) 13 - mrjxyz
-  type: vless
-  server: 57.131.32.191
-  port: 80
-  uuid: 049e56d8-0ba0-49e3-b764-ee04122b9f00
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /vless/
-    headers:
-      Host: ov-italy1.09vpn.com
-- name: 🇮🇹 意大利 (Italy) 14 - mrjxyz
   type: vless
   server: 57.131.32.191
   port: 80
@@ -169,7 +144,7 @@ proxies:
   ws-opts:
     path: /vless/
     headers:
-      Host: OV-Italy1.09vpn.com
+      Host: ov-italy1.09vpn.com
 proxy-groups:
 - name: PROXIES
   type: select
@@ -187,8 +162,6 @@ proxy-groups:
   - 🇮🇹 意大利 (Italy) 10 - mrjxyz
   - 🇮🇹 意大利 (Italy) 11 - mrjxyz
   - 🇮🇹 意大利 (Italy) 12 - mrjxyz
-  - 🇮🇹 意大利 (Italy) 13 - mrjxyz
-  - 🇮🇹 意大利 (Italy) 14 - mrjxyz
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -206,7 +179,5 @@ proxy-groups:
   - 🇮🇹 意大利 (Italy) 10 - mrjxyz
   - 🇮🇹 意大利 (Italy) 11 - mrjxyz
   - 🇮🇹 意大利 (Italy) 12 - mrjxyz
-  - 🇮🇹 意大利 (Italy) 13 - mrjxyz
-  - 🇮🇹 意大利 (Italy) 14 - mrjxyz
 rules:
 - MATCH,PROXIES
