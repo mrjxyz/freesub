@@ -6,20 +6,14 @@
       "tag": "select",
       "outbounds": [
         "auto",
-        "🇲🇾 MY 01 - mrjxyz",
-        "🇲🇾 MY 02 - mrjxyz",
-        "🇲🇾 MY 03 - mrjxyz",
-        "🇲🇾 MY 04 - mrjxyz"
+        "🇲🇾 MY 01 - mrjxyz"
       ]
     },
     {
       "type": "urltest",
       "tag": "auto",
       "outbounds": [
-        "🇲🇾 MY 01 - mrjxyz",
-        "🇲🇾 MY 02 - mrjxyz",
-        "🇲🇾 MY 03 - mrjxyz",
-        "🇲🇾 MY 04 - mrjxyz"
+        "🇲🇾 MY 01 - mrjxyz"
       ],
       "url": "https://www.google.com/generate_204"
     },

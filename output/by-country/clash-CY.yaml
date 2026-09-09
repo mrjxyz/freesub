@@ -15,31 +15,25 @@ proxies:
   reality-opts:
     public-key: MN6QjUHDUXyteMdR-cDna89fq4X3qgQhLnNqTtRUbBQ
   servername: deepl.com
-  client-fingerprint: firefox
+  client-fingerprint: qq
 - name: 🇨🇾 CY 02 - mrjxyz
   type: vless
-  server: 194.76.154.31
-  port: 40443
-  uuid: 9f0baff8-bdee-4de9-9515-bcc4932b41fa
+  server: 45.9.2.171
+  port: 8443
+  uuid: 167610e4-bcaf-4074-bc2d-0c08dc4ea294
   udp: true
   tls: true
   skip-cert-verify: true
-  reality-opts:
-    public-key: MN6QjUHDUXyteMdR-cDna89fq4X3qgQhLnNqTtRUbBQ
-  servername: deepl.com
-  client-fingerprint: chrome
+  servername: torr.wlrus.cfd
 - name: 🇨🇾 CY 03 - mrjxyz
   type: vless
-  server: 194.76.154.31
-  port: 40443
-  uuid: 9f0baff8-bdee-4de9-9515-bcc4932b41fa
+  server: 45.9.2.171
+  port: 8443
+  uuid: 167610e4-bcaf-4074-bc2d-0c08dc4ea294
   udp: true
   tls: true
   skip-cert-verify: true
-  reality-opts:
-    public-key: MN6QjUHDUXyteMdR-cDna89fq4X3qgQhLnNqTtRUbBQ
-  servername: deepl.com
-  client-fingerprint: chrome
+  servername: torr.wlrus.cfd
 - name: 🇨🇾 CY 04 - mrjxyz
   type: vless
   server: 194.76.154.31
@@ -75,17 +69,32 @@ proxies:
   reality-opts:
     public-key: MN6QjUHDUXyteMdR-cDna89fq4X3qgQhLnNqTtRUbBQ
   servername: deepl.com
-  client-fingerprint: firefox
+  client-fingerprint: chrome
 - name: 🇨🇾 CY 07 - mrjxyz
   type: vless
-  server: 45.9.2.171
-  port: 8443
-  uuid: 167610e4-bcaf-4074-bc2d-0c08dc4ea294
+  server: 194.76.154.31
+  port: 40443
+  uuid: 9f0baff8-bdee-4de9-9515-bcc4932b41fa
   udp: true
   tls: true
   skip-cert-verify: true
-  servername: torr.wlrus.cfd
+  reality-opts:
+    public-key: MN6QjUHDUXyteMdR-cDna89fq4X3qgQhLnNqTtRUbBQ
+  servername: deepl.com
+  client-fingerprint: firefox
 - name: 🇨🇾 CY 08 - mrjxyz
+  type: vless
+  server: 194.76.154.31
+  port: 40443
+  uuid: 9f0baff8-bdee-4de9-9515-bcc4932b41fa
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  reality-opts:
+    public-key: MN6QjUHDUXyteMdR-cDna89fq4X3qgQhLnNqTtRUbBQ
+  servername: deepl.com
+  client-fingerprint: chrome
+- name: 🇨🇾 CY 09 - mrjxyz
   type: vless
   server: 194.76.154.31
   port: 40443
@@ -110,6 +119,7 @@ proxy-groups:
   - 🇨🇾 CY 06 - mrjxyz
   - 🇨🇾 CY 07 - mrjxyz
   - 🇨🇾 CY 08 - mrjxyz
+  - 🇨🇾 CY 09 - mrjxyz
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -123,5 +133,6 @@ proxy-groups:
   - 🇨🇾 CY 06 - mrjxyz
   - 🇨🇾 CY 07 - mrjxyz
   - 🇨🇾 CY 08 - mrjxyz
+  - 🇨🇾 CY 09 - mrjxyz
 rules:
 - MATCH,PROXIES
