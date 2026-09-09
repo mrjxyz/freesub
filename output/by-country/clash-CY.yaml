@@ -28,6 +28,15 @@ proxies:
     public-key: MN6QjUHDUXyteMdR-cDna89fq4X3qgQhLnNqTtRUbBQ
   servername: deepl.com
   client-fingerprint: chrome
+- name: 🇨🇾 CY 03 - mrjxyz
+  type: vless
+  server: 45.9.2.171
+  port: 8443
+  uuid: 167610e4-bcaf-4074-bc2d-0c08dc4ea294
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: torr.wlrus.cfd
 proxy-groups:
 - name: PROXIES
   type: select
@@ -35,6 +44,7 @@ proxy-groups:
   - AUTO
   - 🇨🇾 CY 01 - mrjxyz
   - 🇨🇾 CY 02 - mrjxyz
+  - 🇨🇾 CY 03 - mrjxyz
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -42,5 +52,6 @@ proxy-groups:
   proxies:
   - 🇨🇾 CY 01 - mrjxyz
   - 🇨🇾 CY 02 - mrjxyz
+  - 🇨🇾 CY 03 - mrjxyz
 rules:
 - MATCH,PROXIES
