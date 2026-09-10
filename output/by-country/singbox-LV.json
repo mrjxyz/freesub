@@ -6,22 +6,14 @@
       "tag": "select",
       "outbounds": [
         "auto",
-        "🇱🇻 LV 01 - mrjxyz",
-        "🇱🇻 LV 02 - mrjxyz",
-        "🇱🇻 LV 03 - mrjxyz",
-        "🇱🇻 LV 04 - mrjxyz",
-        "🇱🇻 LV 05 - mrjxyz"
+        "🇱🇻 LV 01 - mrjxyz"
       ]
     },
     {
       "type": "urltest",
       "tag": "auto",
       "outbounds": [
-        "🇱🇻 LV 01 - mrjxyz",
-        "🇱🇻 LV 02 - mrjxyz",
-        "🇱🇻 LV 03 - mrjxyz",
-        "🇱🇻 LV 04 - mrjxyz",
-        "🇱🇻 LV 05 - mrjxyz"
+        "🇱🇻 LV 01 - mrjxyz"
       ],
       "url": "https://www.google.com/generate_204"
     },
