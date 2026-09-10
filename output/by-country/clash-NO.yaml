@@ -15,7 +15,7 @@ proxies:
   reality-opts:
     public-key: 5RCgAVjaT7hwdVIKAEULswXGqR127ZOZV6X17nEhYk8
   servername: bowandbead.com
-  client-fingerprint: edge
+  client-fingerprint: chrome
 - name: 🇳🇴 NO 02 - mrjxyz
   type: vless
   server: 151.242.168.125
@@ -27,7 +27,7 @@ proxies:
   reality-opts:
     public-key: 5RCgAVjaT7hwdVIKAEULswXGqR127ZOZV6X17nEhYk8
   servername: bowandbead.com
-  client-fingerprint: qq
+  client-fingerprint: edge
 - name: 🇳🇴 NO 03 - mrjxyz
   type: ss
   server: 185.213.23.63
@@ -46,20 +46,8 @@ proxies:
   reality-opts:
     public-key: 5RCgAVjaT7hwdVIKAEULswXGqR127ZOZV6X17nEhYk8
   servername: bowandbead.com
-  client-fingerprint: chrome
+  client-fingerprint: qq
 - name: 🇳🇴 NO 05 - mrjxyz
-  type: vless
-  server: 151.242.168.125
-  port: 390
-  uuid: b02ff150-ee30-46e0-9ea1-adbfd7762a06
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  reality-opts:
-    public-key: 5RCgAVjaT7hwdVIKAEULswXGqR127ZOZV6X17nEhYk8
-  servername: bowandbead.com
-  client-fingerprint: ios
-- name: 🇳🇴 NO 06 - mrjxyz
   type: vless
   server: 151.242.168.125
   port: 390
@@ -81,7 +69,6 @@ proxy-groups:
   - 🇳🇴 NO 03 - mrjxyz
   - 🇳🇴 NO 04 - mrjxyz
   - 🇳🇴 NO 05 - mrjxyz
-  - 🇳🇴 NO 06 - mrjxyz
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -92,6 +79,5 @@ proxy-groups:
   - 🇳🇴 NO 03 - mrjxyz
   - 🇳🇴 NO 04 - mrjxyz
   - 🇳🇴 NO 05 - mrjxyz
-  - 🇳🇴 NO 06 - mrjxyz
 rules:
 - MATCH,PROXIES
