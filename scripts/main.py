@@ -18,16 +18,42 @@ import maxminddb
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+
+# ==========================
+# 测试参数配置
+# ==========================
+
+TEST_URL = "https://www.gstatic.com/generate_204"
+TIMEOUT = 5
+MAX_NODES = 200
+
+
+# ==========================
+# 节点来源
+# ==========================
+
+
 SOURCE_URLS = [
     "https://wild-cloud-9893.heleimail.workers.dev",
+    "https://open.heleimail.workers.dev/",
+
+    "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_base64_Sub.txt",
+    "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt",
+
+    "https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/protocols/vless_base64.txt",
+    "https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/protocols/vmess_base64.txt",
+
+    "https://github.com/Au1rxx/free-vpn-subscriptions/raw/main/output/v2ray-base64.txt",
     "https://github.com/Au1rxx/free-vpn-subscriptions/raw/main/output/by-country/v2ray-base64-TW.txt",
+
+    "https://raw.githubusercontent.com/freefq/free/master/v2",
+
     "https://raw.githubusercontent.com/ShatakVPN/ConfigForge-V2Ray/main/configs/all.txt",
     "https://raw.githubusercontent.com/10ium/HiN-VPN/main/subscription/base64/mix",
+
     "https://raw.githubusercontent.com/10ium/telegram-configs-collector/main/protocols/hysteria",
     "https://raw.githubusercontent.com/10ium/telegram-configs-collector/main/security/tls",
-    "https://github.com/Au1rxx/free-vpn-subscriptions/raw/main/output/v2ray-base64.txt",
-    "https://raw.githubusercontent.com/freefq/free/master/v2",
-    "https://open.heleimail.workers.dev/",
+
     "https://www.ermao.net/sub/v2ray/ermao.net",
 ]
 
@@ -508,7 +534,11 @@ def test_single_node_xray(node_tuple):
             "http": f"socks5h://127.0.0.1:{socks_port}",
             "https": f"socks5h://127.0.0.1:{socks_port}"
         }
-        resp = requests.get("https://www.google.com/generate_204", proxies=proxies, timeout=6.5)
+        resp = requests.get(
+    TEST_URL,
+    proxies=proxies,
+    timeout=TIMEOUT
+)
         if resp.status_code in [200, 204]:
             delay_ms = int((time.time() - start_t) * 1000)
             if 30 < delay_ms < 6300:
@@ -548,7 +578,11 @@ def test_single_node_xray(node_tuple):
     return None
 
 def run_real_delay_test_xray(candidates):
-    print(f"[*] 启动 Xray 真实双向网络通道测活，候选节点数: {len(candidates)}...")
+    candidates = candidates[:MAX_NODES]
+
+    print(
+        f"[*] 启动 Xray 真实双向网络通道测活，测试节点数: {len(candidates)}..."
+    )
     alive = []
     with ThreadPoolExecutor(max_workers=25) as executor:
         futures = {executor.submit(test_single_node_xray, item): item for item in candidates}
