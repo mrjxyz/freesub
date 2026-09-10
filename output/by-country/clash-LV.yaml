@@ -4,7 +4,137 @@ allow-lan: true
 mode: rule
 log-level: info
 proxies:
-- name: 🇱🇻 LV 01 - mrjxyz
+- name: 🇱🇻 LV 01 - xiaohe
+  type: vless
+  server: 89.36.161.222
+  port: 2096
+  uuid: 70e20b2e-3b1f-4c25-9a3d-9240570391bb
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: laoye.in-gect.fun
+- name: 🇱🇻 LV 02 - xiaohe
+  type: vless
+  server: 89.36.161.222
+  port: 2096
+  uuid: 70e20b2e-3b1f-4c25-9a3d-9240570391bb
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: laoye.in-gect.fun
+- name: 🇱🇻 LV 03 - xiaohe
+  type: vless
+  server: 89.36.161.222
+  port: 2096
+  uuid: 70e20b2e-3b1f-4c25-9a3d-9240570391bb
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: 89.36.161.222
+- name: 🇱🇻 LV 04 - xiaohe
+  type: vless
+  server: 89.36.161.222
+  port: 2096
+  uuid: 70e20b2e-3b1f-4c25-9a3d-9240570391bb
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: laoye.in-gect.fun
+- name: 🇱🇻 LV 05 - xiaohe
+  type: vless
+  server: laoye.in-gect.fun
+  port: 2096
+  uuid: 70e20b2e-3b1f-4c25-9a3d-9240570391bb
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: laoye.in-gect.fun
+- name: 🇱🇻 LV 06 - xiaohe
+  type: vless
+  server: laoye.in-gect.fun
+  port: 2096
+  uuid: 70e20b2e-3b1f-4c25-9a3d-9240570391bb
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: laoye.in-gect.fun
+- name: 🇱🇻 LV 07 - xiaohe
+  type: vless
+  server: 89.36.161.222
+  port: 2096
+  uuid: 70e20b2e-3b1f-4c25-9a3d-9240570391bb
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: 89.36.161.222
+- name: 🇱🇻 LV 08 - xiaohe
+  type: vless
+  server: 89.36.161.222
+  port: 2096
+  uuid: 70e20b2e-3b1f-4c25-9a3d-9240570391bb
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: laoye.in-gect.fun
+- name: 🇱🇻 LV 09 - xiaohe
+  type: vless
+  server: laoye.in-gect.fun
+  port: 2096
+  uuid: 70e20b2e-3b1f-4c25-9a3d-9240570391bb
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: laoye.in-gect.fun
+- name: 🇱🇻 LV 10 - xiaohe
+  type: vless
+  server: 89.36.161.222
+  port: 2096
+  uuid: 70e20b2e-3b1f-4c25-9a3d-9240570391bb
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: 89.36.161.222
+- name: 🇱🇻 LV 11 - xiaohe
   type: vless
   server: 89.36.161.222
   port: 2096
@@ -22,12 +152,32 @@ proxy-groups:
   type: select
   proxies:
   - AUTO
-  - 🇱🇻 LV 01 - mrjxyz
+  - 🇱🇻 LV 01 - xiaohe
+  - 🇱🇻 LV 02 - xiaohe
+  - 🇱🇻 LV 03 - xiaohe
+  - 🇱🇻 LV 04 - xiaohe
+  - 🇱🇻 LV 05 - xiaohe
+  - 🇱🇻 LV 06 - xiaohe
+  - 🇱🇻 LV 07 - xiaohe
+  - 🇱🇻 LV 08 - xiaohe
+  - 🇱🇻 LV 09 - xiaohe
+  - 🇱🇻 LV 10 - xiaohe
+  - 🇱🇻 LV 11 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
   interval: 300
   proxies:
-  - 🇱🇻 LV 01 - mrjxyz
+  - 🇱🇻 LV 01 - xiaohe
+  - 🇱🇻 LV 02 - xiaohe
+  - 🇱🇻 LV 03 - xiaohe
+  - 🇱🇻 LV 04 - xiaohe
+  - 🇱🇻 LV 05 - xiaohe
+  - 🇱🇻 LV 06 - xiaohe
+  - 🇱🇻 LV 07 - xiaohe
+  - 🇱🇻 LV 08 - xiaohe
+  - 🇱🇻 LV 09 - xiaohe
+  - 🇱🇻 LV 10 - xiaohe
+  - 🇱🇻 LV 11 - xiaohe
 rules:
 - MATCH,PROXIES
