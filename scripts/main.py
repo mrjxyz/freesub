@@ -28,7 +28,9 @@ SOURCE_URLS = [
     "https://github.com/Au1rxx/free-vpn-subscriptions/raw/main/output/v2ray-base64.txt",
     "https://raw.githubusercontent.com/freefq/free/master/v2",
     "https://open.heleimail.workers.dev/",
+    "https://raw.githubusercontent.com/0xRadikal/Free-v2ray-Configs/main/protocols/vless.txt",
     "https://www.ermao.net/sub/v2ray/ermao.net",
+    "https://raw.githubusercontent.com/Epodonios/v2ray-configs/main/All_Configs_Sub.txt",    
 ]
 
 OUTPUT_DIR = "output"
