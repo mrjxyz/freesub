@@ -6,22 +6,14 @@
       "tag": "select",
       "outbounds": [
         "auto",
-        "🇹🇭 TH 01 - mrjxyz",
-        "🇹🇭 TH 02 - mrjxyz",
-        "🇹🇭 TH 03 - mrjxyz",
-        "🇹🇭 TH 04 - mrjxyz",
-        "🇹🇭 TH 05 - mrjxyz"
+        "🇹🇭 TH 01 - mrjxyz"
       ]
     },
     {
       "type": "urltest",
       "tag": "auto",
       "outbounds": [
-        "🇹🇭 TH 01 - mrjxyz",
-        "🇹🇭 TH 02 - mrjxyz",
-        "🇹🇭 TH 03 - mrjxyz",
-        "🇹🇭 TH 04 - mrjxyz",
-        "🇹🇭 TH 05 - mrjxyz"
+        "🇹🇭 TH 01 - mrjxyz"
       ],
       "url": "https://www.google.com/generate_204"
     },
