@@ -5,18 +5,20 @@ mode: rule
 log-level: info
 proxies:
 - name: 🇲🇾 MY 01 - xiaohe
-  type: vless
-  server: 38.60.168.98
-  port: 2087
-  uuid: 8a346b7c-5b95-4845-affa-0e5d9929e9ae
+  type: vmess
+  server: 47.250.45.234
+  port: 43063
+  uuid: c77f48f5-4be3-4461-b52b-49998e7b897b
+  alterId: 0
+  cipher: auto
   udp: true
   tls: false
   skip-cert-verify: true
   network: ws
   ws-opts:
-    path: /db55c40bbc75
+    path: /arki?ed=2048
     headers:
-      Host: 38.60.168.98
+      Host: ''
 - name: 🇲🇾 MY 02 - xiaohe
   type: vless
   server: 38.60.168.98
@@ -44,6 +46,19 @@ proxies:
     headers:
       Host: 38.60.168.98
 - name: 🇲🇾 MY 04 - xiaohe
+  type: vless
+  server: 38.60.168.98
+  port: 2087
+  uuid: 8a346b7c-5b95-4845-affa-0e5d9929e9ae
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /db55c40bbc75
+    headers:
+      Host: 38.60.168.98
+- name: 🇲🇾 MY 05 - xiaohe
   type: vmess
   server: 47.250.45.234
   port: 8613
@@ -58,7 +73,7 @@ proxies:
     path: /arki?ed=2048
     headers:
       Host: ''
-- name: 🇲🇾 MY 05 - xiaohe
+- name: 🇲🇾 MY 06 - xiaohe
   type: vmess
   server: 47.250.45.234
   port: 43063
@@ -73,6 +88,19 @@ proxies:
     path: /arki?ed=2048
     headers:
       Host: ''
+- name: 🇲🇾 MY 07 - xiaohe
+  type: vless
+  server: 38.60.168.98
+  port: 2087
+  uuid: 8a346b7c-5b95-4845-affa-0e5d9929e9ae
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /db55c40bbc75
+    headers:
+      Host: 38.60.168.98
 proxy-groups:
 - name: PROXIES
   type: select
@@ -83,6 +111,8 @@ proxy-groups:
   - 🇲🇾 MY 03 - xiaohe
   - 🇲🇾 MY 04 - xiaohe
   - 🇲🇾 MY 05 - xiaohe
+  - 🇲🇾 MY 06 - xiaohe
+  - 🇲🇾 MY 07 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -93,5 +123,7 @@ proxy-groups:
   - 🇲🇾 MY 03 - xiaohe
   - 🇲🇾 MY 04 - xiaohe
   - 🇲🇾 MY 05 - xiaohe
+  - 🇲🇾 MY 06 - xiaohe
+  - 🇲🇾 MY 07 - xiaohe
 rules:
 - MATCH,PROXIES
