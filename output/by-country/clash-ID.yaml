@@ -12,20 +12,6 @@ proxies:
   password: 8C5valhOd8vfwaTXUSZ6Zyb0Ip34lRR5z7P8az
   udp: true
 - name: 🇮🇩 ID 02 - xiaohe
-  type: vless
-  server: 43.229.254.182
-  port: 443
-  uuid: 3db635e4-f9ec-42d6-8aba-e23df8b0e6da
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: mia0.pages.dev
-  network: ws
-  ws-opts:
-    path: /club/account/archive?ed=2560
-    headers:
-      Host: mia0.pages.dev
-- name: 🇮🇩 ID 03 - xiaohe
   type: ss
   server: 103.160.63.199
   port: 31348
@@ -39,7 +25,6 @@ proxy-groups:
   - AUTO
   - 🇮🇩 ID 01 - xiaohe
   - 🇮🇩 ID 02 - xiaohe
-  - 🇮🇩 ID 03 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -47,6 +32,5 @@ proxy-groups:
   proxies:
   - 🇮🇩 ID 01 - xiaohe
   - 🇮🇩 ID 02 - xiaohe
-  - 🇮🇩 ID 03 - xiaohe
 rules:
 - MATCH,PROXIES
