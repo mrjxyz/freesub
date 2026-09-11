@@ -9,14 +9,14 @@ proxies:
   server: 20.234.82.250
   port: 443
   cipher: chacha20-ietf-poly1305
-  password: D1VXfiP9b9VeX9ZD
+  password: kYhF4RWqohTpbVau
   udp: true
 - name: 🇮🇪 IE 02 - xiaohe
   type: ss
   server: 20.234.82.250
   port: 443
   cipher: chacha20-ietf-poly1305
-  password: kYhF4RWqohTpbVau
+  password: D1VXfiP9b9VeX9ZD
   udp: true
 - name: 🇮🇪 IE 03 - xiaohe
   type: ss
@@ -26,27 +26,13 @@ proxies:
   password: kYhF4RWqohTpbVau
   udp: true
 - name: 🇮🇪 IE 04 - xiaohe
-  type: vless
-  server: fq.jp188.dpdns.org
-  port: 443
-  uuid: 42c62a5a-cd31-4551-80ef-908732370287
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: fq.jp188.dpdns.org
-  network: ws
-  ws-opts:
-    path: /fp=chrome
-    headers:
-      Host: fq.jp188.dpdns.org
-- name: 🇮🇪 IE 05 - xiaohe
   type: ss
   server: 20.234.82.250
   port: 443
   cipher: chacha20-ietf-poly1305
   password: R2QvJ9exeq61wfSV
   udp: true
-- name: 🇮🇪 IE 06 - xiaohe
+- name: 🇮🇪 IE 05 - xiaohe
   type: ss
   server: 20.234.82.250
   port: 443
@@ -63,7 +49,6 @@ proxy-groups:
   - 🇮🇪 IE 03 - xiaohe
   - 🇮🇪 IE 04 - xiaohe
   - 🇮🇪 IE 05 - xiaohe
-  - 🇮🇪 IE 06 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -74,6 +59,5 @@ proxy-groups:
   - 🇮🇪 IE 03 - xiaohe
   - 🇮🇪 IE 04 - xiaohe
   - 🇮🇪 IE 05 - xiaohe
-  - 🇮🇪 IE 06 - xiaohe
 rules:
 - MATCH,PROXIES
