@@ -6,17 +6,18 @@ log-level: info
 proxies:
 - name: 🇲🇩 MD 01 - xiaohe
   type: vless
-  server: 172.67.192.84
-  port: 2095
+  server: 104.21.70.21
+  port: 443
   uuid: a22bff60-a40a-4250-bde2-4c660e363b47
   udp: true
-  tls: false
+  tls: true
   skip-cert-verify: true
+  servername: index.harmonica01.workers.dev
   network: ws
   ws-opts:
-    path: /juvsrnmgdu8i0179k5
+    path: /axch1mttbxz2k55y01
     headers:
-      Host: index.harmonica02.workers.dev
+      Host: index.harmonica01.workers.dev
 proxy-groups:
 - name: PROXIES
   type: select

@@ -20,20 +20,6 @@ proxies:
       Host: fancy-rain-136e.thisisalee.workers.dev
 - name: 🇬🇷 GR 02 - xiaohe
   type: vless
-  server: 188.114.97.3
-  port: 443
-  uuid: d7d8af23-36cd-4c66-a42a-4469c177210f
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: FanCy-raIn-136E.tHisIsaLEe.wOrKeRS.deV
-  network: ws
-  ws-opts:
-    path: /eyJqdW5rIjoidmJOWHUwYnBOS00zT04iLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6WyI5MS4xODYuMjE5LjgyIl19?ed=2560
-    headers:
-      Host: fancy-rain-136e.thisisalee.workers.dev
-- name: 🇬🇷 GR 03 - xiaohe
-  type: vless
   server: 104.21.234.13
   port: 2053
   uuid: d7d8af23-36cd-4c66-a42a-4469c177210f
@@ -46,34 +32,20 @@ proxies:
     path: /eyJqdW5rIjoiMXZFdnZOdVFvSkNWIiwicHJvdG9jb2wiOiJ2bCIsIm1vZGUiOiJwcm94eWlwIiwicGFuZWxJUHMiOlsiOTEuMTg2LjIxOS44MiJdfQ==?ed=2560
     headers:
       Host: fancy-rain-136e.thisisalee.workers.dev
-- name: 🇬🇷 GR 04 - xiaohe
+- name: 🇬🇷 GR 03 - xiaohe
   type: vless
-  server: 91.186.218.227
-  port: 4443
-  uuid: e26ac108-8406-47d6-978f-be02401d0bc6
+  server: 188.114.97.3
+  port: 443
+  uuid: d7d8af23-36cd-4c66-a42a-4469c177210f
   udp: true
   tls: true
   skip-cert-verify: true
-  servername: mw5qisav.wjwqvie0wb1eqhb8e83clqdoq3m5p9a4on.workers.dev
+  servername: FanCy-raIn-136E.tHisIsaLEe.wOrKeRS.deV
   network: ws
   ws-opts:
-    path: /@Marisa_kristi
+    path: /eyJqdW5rIjoidmJOWHUwYnBOS00zT04iLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6WyI5MS4xODYuMjE5LjgyIl19?ed=2560
     headers:
-      Host: mw5qisav.wjwqvie0wb1eqhb8e83clqdoq3m5p9a4on.workers.dev
-- name: 🇬🇷 GR 05 - xiaohe
-  type: vless
-  server: 91.186.218.227
-  port: 4443
-  uuid: b1f373d2-e67a-4d72-824a-d4dc726b2c28
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: 3tmj2egtm-fno.49bnithzk8vphybv36d1z1xkzfvogt2m6.workers.dev
-  network: ws
-  ws-opts:
-    path: /@Marisa_kristi
-    headers:
-      Host: 3tmj2egtm-fno.49bnithzk8vphybv36d1z1xkzfvogt2m6.workers.dev
+      Host: fancy-rain-136e.thisisalee.workers.dev
 proxy-groups:
 - name: PROXIES
   type: select
@@ -82,8 +54,6 @@ proxy-groups:
   - 🇬🇷 GR 01 - xiaohe
   - 🇬🇷 GR 02 - xiaohe
   - 🇬🇷 GR 03 - xiaohe
-  - 🇬🇷 GR 04 - xiaohe
-  - 🇬🇷 GR 05 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -92,7 +62,5 @@ proxy-groups:
   - 🇬🇷 GR 01 - xiaohe
   - 🇬🇷 GR 02 - xiaohe
   - 🇬🇷 GR 03 - xiaohe
-  - 🇬🇷 GR 04 - xiaohe
-  - 🇬🇷 GR 05 - xiaohe
 rules:
 - MATCH,PROXIES
