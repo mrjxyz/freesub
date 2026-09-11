@@ -17,7 +17,7 @@ proxies:
   ws-opts:
     path: /xvpnws/
     headers:
-      Host: ''
+      Host: best-internet-iran.app.runonflux.io
 proxy-groups:
 - name: PROXIES
   type: select
