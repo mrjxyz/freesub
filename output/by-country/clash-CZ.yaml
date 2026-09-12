@@ -18,33 +18,17 @@ proxies:
     path: /proxyip=154.3.33.43
     headers:
       Host: mianfei-73q.pages.dev
-- name: 🇨🇿 CZ 02 - xiaohe
-  type: vless
-  server: chatgpt.com
-  port: 443
-  uuid: a43a9a45-7387-4faf-ad06-24b1ae181fdc
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: SNowy-glade-85FA.ArSHIaTAkaLlOo88.wOrKErs.dEv
-  network: ws
-  ws-opts:
-    path: /eyJqdW5rIjoiVzg3NkFVRjZaUCIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560
-    headers:
-      Host: snowy-glade-85fa.arshiatakalloo88.workers.dev
 proxy-groups:
 - name: PROXIES
   type: select
   proxies:
   - AUTO
   - 🇨🇿 CZ 01 - xiaohe
-  - 🇨🇿 CZ 02 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
   interval: 300
   proxies:
   - 🇨🇿 CZ 01 - xiaohe
-  - 🇨🇿 CZ 02 - xiaohe
 rules:
 - MATCH,PROXIES
