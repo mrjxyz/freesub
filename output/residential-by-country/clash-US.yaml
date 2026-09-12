@@ -6,17 +6,17 @@ log-level: info
 proxies:
 - name: 🇺🇸 美国 (United States) 01 (家宽) - xiaohe
   type: vless
-  server: 104.21.55.229
+  server: 172.64.42.85
   port: 8880
-  uuid: f55a75a7-5aa6-4df7-814a-99da0edb5c86
+  uuid: 47fcef29-ab4e-4aa6-932b-d95a18f28a4e
   udp: true
   tls: false
   skip-cert-verify: true
   network: ws
   ws-opts:
-    path: /pyip=ProxyIP.US.CMLiussss.net
+    path: /?ed=2560security=tls
     headers:
-      Host: autumn-cloud-ab5e.229-601.workers.dev
+      Host: 8nj2r.2k8t.f88.hh.vavava.kdns.fr
 proxy-groups:
 - name: PROXIES
   type: select

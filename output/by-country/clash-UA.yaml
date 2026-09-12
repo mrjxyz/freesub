@@ -6,17 +6,16 @@ log-level: info
 proxies:
 - name: 🇺🇦 UA 01 - xiaohe
   type: vless
-  server: cf1.466688.xyz
-  port: 8880
-  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  server: ukraine-sgood.wopd.butnorwa.butter.silicore.ir
+  port: 9000
+  uuid: b33e4571-de3f-4249-b246-b2acf3db2f36
   udp: true
-  tls: false
+  tls: true
   skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /?ed=2560
-    headers:
-      Host: vms.lifetime54.workers.dev
+  reality-opts:
+    public-key: Du5pk4KuMNA1sRcSpmuoLuC0HmxDBmFljFNfUzqxKiM
+  servername: sheets.google.com
+  client-fingerprint: chrome
 proxy-groups:
 - name: PROXIES
   type: select

@@ -6,17 +6,13 @@ log-level: info
 proxies:
 - name: 🇪🇪 EE 01 - xiaohe
   type: vless
-  server: 45.80.110.50
-  port: 8880
-  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  server: 94.183.170.135
+  port: 8443
+  uuid: 06c4e938-2954-478f-a870-ca1b163e30e9
   udp: true
-  tls: false
+  tls: true
   skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /?ed=2560
-    headers:
-      Host: vms.lifetime51.workers.dev
+  servername: estproxy4.lockdwn.com
 - name: 🇪🇪 EE 02 - xiaohe
   type: vless
   server: 94.183.170.135
@@ -29,6 +25,15 @@ proxies:
 - name: 🇪🇪 EE 03 - xiaohe
   type: vless
   server: 94.183.170.135
+  port: 8443
+  uuid: 06c4e938-2954-478f-a870-ca1b163e30e9
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: estproxy4.lockdwn.com
+- name: 🇪🇪 EE 04 - xiaohe
+  type: vless
+  server: 94.183.170.135
   port: 443
   uuid: 06c4e938-2954-478f-a870-ca1b163e30e9
   udp: true
@@ -39,7 +44,7 @@ proxies:
     path: /
     headers:
       Host: 94.183.170.135
-- name: 🇪🇪 EE 04 - xiaohe
+- name: 🇪🇪 EE 05 - xiaohe
   type: vless
   server: 94.183.170.135
   port: 8443
@@ -48,33 +53,6 @@ proxies:
   tls: true
   skip-cert-verify: true
   servername: estproxy4.lockdwn.com
-- name: 🇪🇪 EE 05 - xiaohe
-  type: vless
-  server: mybb.com
-  port: 443
-  uuid: aebe5a70-0ca3-46ce-8208-8b5bab1346ce
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: rAyAn-007.nAsTaRaN.DpDnS.OrG
-  network: ws
-  ws-opts:
-    path: /?ed=2560
-    headers:
-      Host: rayan-007.nastaran.dpdns.org
-- name: 🇪🇪 EE 06 - xiaohe
-  type: vless
-  server: 45.80.110.30
-  port: 8880
-  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: vms.lifetime51.workers.dev
 proxy-groups:
 - name: PROXIES
   type: select
@@ -85,7 +63,6 @@ proxy-groups:
   - 🇪🇪 EE 03 - xiaohe
   - 🇪🇪 EE 04 - xiaohe
   - 🇪🇪 EE 05 - xiaohe
-  - 🇪🇪 EE 06 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -96,6 +73,5 @@ proxy-groups:
   - 🇪🇪 EE 03 - xiaohe
   - 🇪🇪 EE 04 - xiaohe
   - 🇪🇪 EE 05 - xiaohe
-  - 🇪🇪 EE 06 - xiaohe
 rules:
 - MATCH,PROXIES
