@@ -6,32 +6,6 @@ log-level: info
 proxies:
 - name: 🇹🇷 土耳其 (Turkey) 01 - xiaohe
   type: vless
-  server: 158.94.216.50
-  port: 32306
-  uuid: f1505323-ecb6-4152-9a5b-d37b3ae1cacf
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  reality-opts:
-    public-key: 5iqitmx5fd71pubTxlrX0sd-ei7palcgVL7vtKToJGA
-  servername: play-apps-features.googleusercontent.com
-  client-fingerprint: edge
-- name: 🇹🇷 土耳其 (Turkey) 02 - xiaohe
-  type: vless
-  server: 162.159.91.222
-  port: 443
-  uuid: 50414e45-4c5f-5a45-5553-723a643df685
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: n3zaxce7u0es.crzl48eiuses.workers.dev
-  network: ws
-  ws-opts:
-    path: /stream/PANEL_ZEUS/723a643df685/loc-0
-    headers:
-      Host: n3zaxce7u0es.crzl48eiuses.workers.dev
-- name: 🇹🇷 土耳其 (Turkey) 03 - xiaohe
-  type: vless
   server: tr.iramssmoth.ir
   port: 8443
   uuid: f1505323-ecb6-4152-9a5b-d37b3ae1cacf
@@ -42,6 +16,25 @@ proxies:
     public-key: 72SJFDXHCtB2fWWRrjMj23J8iJ8T_2jvj-iNThmLREs
   servername: play-apps-features.googleusercontent.com
   client-fingerprint: chrome
+- name: 🇹🇷 土耳其 (Turkey) 02 - xiaohe
+  type: vless
+  server: 158.94.216.50
+  port: 32306
+  uuid: f1505323-ecb6-4152-9a5b-d37b3ae1cacf
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  reality-opts:
+    public-key: 5iqitmx5fd71pubTxlrX0sd-ei7palcgVL7vtKToJGA
+  servername: play-apps-features.googleusercontent.com
+  client-fingerprint: edge
+- name: 🇹🇷 土耳其 (Turkey) 03 - xiaohe
+  type: ss
+  server: 188.132.174.236
+  port: 1080
+  cipher: chacha20-ietf-poly1305
+  password: rSeYcig_XBy8q3k33NpK3A
+  udp: true
 - name: 🇹🇷 土耳其 (Turkey) 04 - xiaohe
   type: vless
   server: connect3.nyxserver.ir
@@ -53,6 +46,19 @@ proxies:
   servername: connect3.nyxserver.ir
 - name: 🇹🇷 土耳其 (Turkey) 05 - xiaohe
   type: vless
+  server: 144.225.65.166
+  port: 45462
+  uuid: b567eb70-be4d-4fbc-bc6a-bf20e2a7da97
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /fhiioigx
+    headers:
+      Host: play.google.com
+- name: 🇹🇷 土耳其 (Turkey) 06 - xiaohe
+  type: vless
   server: connect3.nyxserver.ir
   port: 8444
   uuid: 0b39a009-2a2a-4035-ba87-cc82894f8e21
@@ -60,32 +66,15 @@ proxies:
   tls: true
   skip-cert-verify: true
   servername: connect3.nyxserver.ir
-- name: 🇹🇷 土耳其 (Turkey) 06 - xiaohe
-  type: vless
-  server: shop.neexbyte.ir
-  port: 8443
-  uuid: 464bc502-f963-45b6-81e3-e33d18427506
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: shop.neexbyte.ir
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: shop.neexbyte.ir
 - name: 🇹🇷 土耳其 (Turkey) 07 - xiaohe
   type: vless
-  server: 158.94.216.50
-  port: 32306
-  uuid: f1505323-ecb6-4152-9a5b-d37b3ae1cacf
+  server: connect3.nyxserver.ir
+  port: 8444
+  uuid: 0b39a009-2a2a-4035-ba87-cc82894f8e21
   udp: true
   tls: true
   skip-cert-verify: true
-  reality-opts:
-    public-key: 5iqitmx5fd71pubTxlrX0sd-ei7palcgVL7vtKToJGA
-  servername: play-apps-features.googleusercontent.com
-  client-fingerprint: chrome
+  servername: connect3.nyxserver.ir
 - name: 🇹🇷 土耳其 (Turkey) 08 - xiaohe
   type: vless
   server: connect3.nyxserver.ir
@@ -105,14 +94,58 @@ proxies:
   skip-cert-verify: true
   servername: connect3.nyxserver.ir
 - name: 🇹🇷 土耳其 (Turkey) 10 - xiaohe
+  type: ss
+  server: 185.39.204.3
+  port: 8098
+  cipher: chacha20-ietf-poly1305
+  password: PluSKSrbtxTvlVv7BOUwn4
+  udp: true
+- name: 🇹🇷 土耳其 (Turkey) 11 - xiaohe
   type: vless
-  server: connect3.nyxserver.ir
-  port: 8444
-  uuid: 0b39a009-2a2a-4035-ba87-cc82894f8e21
+  server: 199.232.78.159
+  port: 443
+  uuid: d7282b41-1f2a-47bb-8593-f464fd6b6d78
   udp: true
   tls: true
   skip-cert-verify: true
-  servername: connect3.nyxserver.ir
+  servername: global.fastly.com
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: BechBad.global.ssl.fastly.net
+- name: 🇹🇷 土耳其 (Turkey) 12 - xiaohe
+  type: vless
+  server: tr.iramssmoth.ir
+  port: 8443
+  uuid: f1505323-ecb6-4152-9a5b-d37b3ae1cacf
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  reality-opts:
+    public-key: 72SJFDXHCtB2fWWRrjMj23J8iJ8T_2jvj-iNThmLREs
+  servername: play-apps-features.googleusercontent.com
+  client-fingerprint: chrome
+- name: 🇹🇷 土耳其 (Turkey) 13 - xiaohe
+  type: vless
+  server: 188.132.237.20
+  port: 2095
+  uuid: 3b9e513e-30d9-4ca8-8340-8f33fc6710de
+  udp: true
+  tls: false
+  skip-cert-verify: true
+- name: 🇹🇷 土耳其 (Turkey) 14 - xiaohe
+  type: vless
+  server: 158.94.216.50
+  port: 32306
+  uuid: f1505323-ecb6-4152-9a5b-d37b3ae1cacf
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  reality-opts:
+    public-key: 5iqitmx5fd71pubTxlrX0sd-ei7palcgVL7vtKToJGA
+  servername: play-apps-features.googleusercontent.com
+  client-fingerprint: chrome
 proxy-groups:
 - name: PROXIES
   type: select
@@ -128,6 +161,10 @@ proxy-groups:
   - 🇹🇷 土耳其 (Turkey) 08 - xiaohe
   - 🇹🇷 土耳其 (Turkey) 09 - xiaohe
   - 🇹🇷 土耳其 (Turkey) 10 - xiaohe
+  - 🇹🇷 土耳其 (Turkey) 11 - xiaohe
+  - 🇹🇷 土耳其 (Turkey) 12 - xiaohe
+  - 🇹🇷 土耳其 (Turkey) 13 - xiaohe
+  - 🇹🇷 土耳其 (Turkey) 14 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -143,5 +180,9 @@ proxy-groups:
   - 🇹🇷 土耳其 (Turkey) 08 - xiaohe
   - 🇹🇷 土耳其 (Turkey) 09 - xiaohe
   - 🇹🇷 土耳其 (Turkey) 10 - xiaohe
+  - 🇹🇷 土耳其 (Turkey) 11 - xiaohe
+  - 🇹🇷 土耳其 (Turkey) 12 - xiaohe
+  - 🇹🇷 土耳其 (Turkey) 13 - xiaohe
+  - 🇹🇷 土耳其 (Turkey) 14 - xiaohe
 rules:
 - MATCH,PROXIES
