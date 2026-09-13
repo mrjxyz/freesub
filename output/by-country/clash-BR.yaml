@@ -6,17 +6,18 @@ log-level: info
 proxies:
 - name: 🇧🇷 BR 01 - xiaohe
   type: vless
-  server: 72.167.230.30
-  port: 8880
-  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  server: freev2.cloudflare.182682.xyz
+  port: 443
+  uuid: 7bbf1712-7504-4bb7-aa8d-df5760066240
   udp: true
-  tls: false
+  tls: true
   skip-cert-verify: true
+  servername: br-gru.xhs152.shop
   network: ws
   ws-opts:
-    path: /
+    path: /announcement?ed=2048
     headers:
-      Host: vms.lifetime51.workers.dev
+      Host: br-gru.xhs152.shop
 proxy-groups:
 - name: PROXIES
   type: select

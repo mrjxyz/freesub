@@ -18,20 +18,19 @@ proxies:
     headers:
       Host: 38.60.168.98
 - name: 🇲🇾 MY 02 - xiaohe
-  type: vmess
-  server: 47.250.45.234
-  port: 8613
-  uuid: 80039b4d-bac0-4f89-82c7-54fad3b0a1ea
-  alterId: 0
-  cipher: auto
+  type: vless
+  server: 188.114.97.6
+  port: 443
+  uuid: a3cd0fea-482b-4b67-be46-de041690b657
   udp: true
-  tls: false
+  tls: true
   skip-cert-verify: true
+  servername: solitary-firefly-e2dc.495-398.workers.dev
   network: ws
   ws-opts:
-    path: /arki?ed=2048
+    path: /pyip=ProxyIP.SG.CMLiussss.net
     headers:
-      Host: ''
+      Host: solitary-firefly-e2dc.495-398.workers.dev
 - name: 🇲🇾 MY 03 - xiaohe
   type: vless
   server: 38.60.168.98
@@ -47,32 +46,17 @@ proxies:
       Host: 38.60.168.98
 - name: 🇲🇾 MY 04 - xiaohe
   type: vless
-  server: 172.66.214.247
-  port: 8880
-  uuid: e7f6f783-6754-4228-a5d0-aeed84b9949a
+  server: 38.60.168.98
+  port: 2087
+  uuid: 8a346b7c-5b95-4845-affa-0e5d9929e9ae
   udp: true
   tls: false
   skip-cert-verify: true
   network: ws
   ws-opts:
-    path: /pyip=ProxyIP.SG.CMLiussss.net
+    path: /db55c40bbc75
     headers:
-      Host: sweet-sun-c70f.317-ba5.workers.dev
-- name: 🇲🇾 MY 05 - xiaohe
-  type: vmess
-  server: 47.250.45.234
-  port: 43063
-  uuid: c77f48f5-4be3-4461-b52b-49998e7b897b
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /arki?ed=2048
-    headers:
-      Host: ''
+      Host: 38.60.168.98
 proxy-groups:
 - name: PROXIES
   type: select
@@ -82,7 +66,6 @@ proxy-groups:
   - 🇲🇾 MY 02 - xiaohe
   - 🇲🇾 MY 03 - xiaohe
   - 🇲🇾 MY 04 - xiaohe
-  - 🇲🇾 MY 05 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -92,6 +75,5 @@ proxy-groups:
   - 🇲🇾 MY 02 - xiaohe
   - 🇲🇾 MY 03 - xiaohe
   - 🇲🇾 MY 04 - xiaohe
-  - 🇲🇾 MY 05 - xiaohe
 rules:
 - MATCH,PROXIES
