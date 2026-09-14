@@ -5,113 +5,6 @@ mode: rule
 log-level: info
 proxies:
 - name: 🇫🇮 FI 01 - xiaohe
-  type: ss
-  server: 65.109.215.118
-  port: 1080
-  cipher: chacha20-ietf-poly1305
-  password: rSeYcig_XBy8q3k33NpK3A
-  udp: true
-- name: 🇫🇮 FI 02 - xiaohe
-  type: vless
-  server: 151.101.56.6
-  port: 443
-  uuid: 0d4fd99b-06ae-4ee2-fee2-fda93a9434f1
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: ssl.fastly.com
-  network: ws
-  ws-opts:
-    path: /?---TELEGRAM---TOOTFFARANGI---TOOTFFARANGI---TOOTFFARANGI---TOOTFFARANGI---TOOTFFARANGI
-    headers:
-      Host: c12.com
-- name: 🇫🇮 FI 03 - xiaohe
-  type: vless
-  server: 212.193.18.183
-  port: 8443
-  uuid: 246b101b-4e4a-451f-8e9c-5e8d3b64b4ef
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  reality-opts:
-    public-key: XnPQT554eJohCPNsM8gw9oCS-3NTZmqxNoU36Td-tlM
-  servername: maps.apple.com
-  client-fingerprint: firefox
-- name: 🇫🇮 FI 04 - xiaohe
-  type: vless
-  server: 188.132.237.20
-  port: 2095
-  uuid: 3b9e513e-30d9-4ca8-8340-8f33fc6710de
-  udp: true
-  tls: false
-  skip-cert-verify: true
-- name: 🇫🇮 FI 05 - xiaohe
-  type: vless
-  server: 188.132.237.20
-  port: 2095
-  uuid: 3b9e513e-30d9-4ca8-8340-8f33fc6710de
-  udp: true
-  tls: false
-  skip-cert-verify: true
-- name: 🇫🇮 FI 06 - xiaohe
-  type: vless
-  server: a2.arshia-nova.ir
-  port: 443
-  uuid: 0d4fd99b-06ae-4ee2-fee2-fda93a9434f1
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: ssl.fastly.com
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: c12.com
-- name: 🇫🇮 FI 07 - xiaohe
-  type: vless
-  server: k2.cloud--vpn.site
-  port: 443
-  uuid: 0d4fd99b-06ae-4ee2-fee2-fda93a9434f1
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: ssl.fastly.com
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: c12.com
-- name: 🇫🇮 FI 08 - xiaohe
-  type: vless
-  server: 188.132.237.20
-  port: 2095
-  uuid: 3b9e513e-30d9-4ca8-8340-8f33fc6710de
-  udp: true
-  tls: false
-  skip-cert-verify: true
-- name: 🇫🇮 FI 09 - xiaohe
-  type: vless
-  server: 151.101.56.6
-  port: 443
-  uuid: 0d4fd99b-06ae-4ee2-fee2-fda93a9434f1
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: ssl.fastly.com
-  network: ws
-  ws-opts:
-    path: /?TELEGRAM--KANAL--@mainv2ray--@mainv2ray--@mainv2ray--@mainv2ray--@mainv2ray--@mainv2ray--@mainv2ray--@mainv2ray--@mainv2ray--@mainv2ray--@mainv2ray--@mainv2ray
-    headers:
-      Host: c12.com
-- name: 🇫🇮 FI 10 - xiaohe
-  type: vless
-  server: 188.132.237.20
-  port: 2095
-  uuid: 3b9e513e-30d9-4ca8-8340-8f33fc6710de
-  udp: true
-  tls: false
-  skip-cert-verify: true
-- name: 🇫🇮 FI 11 - xiaohe
   type: vless
   server: 216.24.57.1
   port: 443
@@ -125,7 +18,14 @@ proxies:
     path: /
     headers:
       Host: f.tmkkarss.online
-- name: 🇫🇮 FI 12 - xiaohe
+- name: 🇫🇮 FI 02 - xiaohe
+  type: ss
+  server: 65.109.215.118
+  port: 1080
+  cipher: chacha20-ietf-poly1305
+  password: rSeYcig_XBy8q3k33NpK3A
+  udp: true
+- name: 🇫🇮 FI 03 - xiaohe
   type: vless
   server: 185.79.138.71
   port: 448
@@ -137,57 +37,21 @@ proxies:
     public-key: CsDgNRcCwCkPIslfZpKTIK71KFpIFNsotbdzKcZVoH8
   servername: www.samsung.com
   client-fingerprint: chrome
-- name: 🇫🇮 FI 13 - xiaohe
+- name: 🇫🇮 FI 04 - xiaohe
   type: vless
-  server: 188.132.237.20
-  port: 2095
-  uuid: 3b9e513e-30d9-4ca8-8340-8f33fc6710de
-  udp: true
-  tls: false
-  skip-cert-verify: true
-- name: 🇫🇮 FI 14 - xiaohe
-  type: vless
-  server: a2.arshia-nova.ir
+  server: fi1.zuoai.cf
   port: 443
-  uuid: 0d4fd99b-06ae-4ee2-fee2-fda93a9434f1
+  uuid: b2593749-691c-428c-9481-14979cba3446
   udp: true
   tls: true
   skip-cert-verify: true
-  servername: ssl.fastly.com
+  servername: xi.tbv.ccwu.cc
   network: ws
   ws-opts:
-    path: /
+    path: /proxyip=us.xiabibi.cf
     headers:
-      Host: c12.com
-- name: 🇫🇮 FI 15 - xiaohe
-  type: vless
-  server: 151.101.56.6
-  port: 443
-  uuid: 0d4fd99b-06ae-4ee2-fee2-fda93a9434f1
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: ssl.fastly.com
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: c12.com
-- name: 🇫🇮 FI 16 - xiaohe
-  type: vless
-  server: a2.arshia-nova.ir
-  port: 443
-  uuid: 0d4fd99b-06ae-4ee2-fee2-fda93a9434f1
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: ssl.fastly.com
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: c12.com
-- name: 🇫🇮 FI 17 - xiaohe
+      Host: xi.tbv.ccwu.cc
+- name: 🇫🇮 FI 05 - xiaohe
   type: vless
   server: 185.79.138.71
   port: 448
@@ -209,18 +73,6 @@ proxy-groups:
   - 🇫🇮 FI 03 - xiaohe
   - 🇫🇮 FI 04 - xiaohe
   - 🇫🇮 FI 05 - xiaohe
-  - 🇫🇮 FI 06 - xiaohe
-  - 🇫🇮 FI 07 - xiaohe
-  - 🇫🇮 FI 08 - xiaohe
-  - 🇫🇮 FI 09 - xiaohe
-  - 🇫🇮 FI 10 - xiaohe
-  - 🇫🇮 FI 11 - xiaohe
-  - 🇫🇮 FI 12 - xiaohe
-  - 🇫🇮 FI 13 - xiaohe
-  - 🇫🇮 FI 14 - xiaohe
-  - 🇫🇮 FI 15 - xiaohe
-  - 🇫🇮 FI 16 - xiaohe
-  - 🇫🇮 FI 17 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -231,17 +83,5 @@ proxy-groups:
   - 🇫🇮 FI 03 - xiaohe
   - 🇫🇮 FI 04 - xiaohe
   - 🇫🇮 FI 05 - xiaohe
-  - 🇫🇮 FI 06 - xiaohe
-  - 🇫🇮 FI 07 - xiaohe
-  - 🇫🇮 FI 08 - xiaohe
-  - 🇫🇮 FI 09 - xiaohe
-  - 🇫🇮 FI 10 - xiaohe
-  - 🇫🇮 FI 11 - xiaohe
-  - 🇫🇮 FI 12 - xiaohe
-  - 🇫🇮 FI 13 - xiaohe
-  - 🇫🇮 FI 14 - xiaohe
-  - 🇫🇮 FI 15 - xiaohe
-  - 🇫🇮 FI 16 - xiaohe
-  - 🇫🇮 FI 17 - xiaohe
 rules:
 - MATCH,PROXIES

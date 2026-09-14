@@ -4,31 +4,29 @@ allow-lan: true
 mode: rule
 log-level: info
 proxies:
-- name: 🇲🇽 MX 01 - xiaohe
+- name: 🇬🇷 GR 01 - xiaohe
   type: vless
-  server: UL-Mexico1.09vpn.com
-  port: 8443
-  uuid: a6d20e79-d326-42c1-bc20-f4cecc6dc42d
+  server: newswedengrrrr.azadfug.ir
+  port: 7005
+  uuid: ac64aec6-85ee-4fc7-b34b-60a7bcf236ec
   udp: true
   tls: true
   skip-cert-verify: true
-  servername: ''
-  network: ws
-  ws-opts:
-    path: /vless/
-    headers:
-      Host: ''
+  reality-opts:
+    public-key: 7aICTN0hv6bhd8bYOjNZniDYSXgD20LunZ3BW6_Zyk4
+  servername: play.googleapis.com
+  client-fingerprint: chrome
 proxy-groups:
 - name: PROXIES
   type: select
   proxies:
   - AUTO
-  - 🇲🇽 MX 01 - xiaohe
+  - 🇬🇷 GR 01 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
   interval: 300
   proxies:
-  - 🇲🇽 MX 01 - xiaohe
+  - 🇬🇷 GR 01 - xiaohe
 rules:
 - MATCH,PROXIES
