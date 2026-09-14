@@ -5,12 +5,19 @@ mode: rule
 log-level: info
 proxies:
 - name: 🇧🇷 BR 01 - xiaohe
-  type: ss
-  server: 216.128.168.190
-  port: 8388
-  cipher: aes-256-gcm
-  password: owVdNnQcdPgthSyX
+  type: vless
+  server: ct.877774.xyz
+  port: 443
+  uuid: 563f3112-71fe-4a88-9055-23df3cbf708d
   udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: br-gru.xhs152.shop
+  network: ws
+  ws-opts:
+    path: /announcement?ed=2048
+    headers:
+      Host: br-gru.xhs152.shop
 proxy-groups:
 - name: PROXIES
   type: select
