@@ -12,26 +12,13 @@ proxies:
   password: QFWzCw2uX9B9i6qAYeFBIE
   udp: true
 - name: 🇷🇴 RO 02 - xiaohe
-  type: vless
-  server: 45.12.30.30
-  port: 8880
-  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: vms.lifetime28.workers.dev
-- name: 🇷🇴 RO 03 - xiaohe
   type: ss
   server: bogging-eyeteeth-fly.freesocks.work
   port: 443
   cipher: chacha20-ietf-poly1305
   password: QFWzCw2uX9B9i6qAYeFBIE
   udp: true
-- name: 🇷🇴 RO 04 - xiaohe
+- name: 🇷🇴 RO 03 - xiaohe
   type: ss
   server: 154.46.31.106
   port: 443
@@ -46,7 +33,6 @@ proxy-groups:
   - 🇷🇴 RO 01 - xiaohe
   - 🇷🇴 RO 02 - xiaohe
   - 🇷🇴 RO 03 - xiaohe
-  - 🇷🇴 RO 04 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -55,6 +41,5 @@ proxy-groups:
   - 🇷🇴 RO 01 - xiaohe
   - 🇷🇴 RO 02 - xiaohe
   - 🇷🇴 RO 03 - xiaohe
-  - 🇷🇴 RO 04 - xiaohe
 rules:
 - MATCH,PROXIES
