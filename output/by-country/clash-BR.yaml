@@ -6,74 +6,29 @@ log-level: info
 proxies:
 - name: 🇧🇷 BR 01 - xiaohe
   type: vless
-  server: 104.64.59.22
+  server: www.visa.com.hk
   port: 443
-  uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
+  uuid: f94a04aa-a98c-4b6c-8fe2-7290d81c500a
   udp: true
   tls: true
   skip-cert-verify: true
-  servername: kkkk-8oc.pages.dev
+  servername: br-gru.xhs152.shop
   network: ws
   ws-opts:
-    path: /?ed=2048
+    path: /announcement?ed=2048
     headers:
-      Host: kkkk-8oc.pages.dev
-- name: 🇧🇷 BR 02 - xiaohe
-  type: vless
-  server: 139.64.235.30
-  port: 8880
-  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: vms.lifetime09.workers.dev
-- name: 🇧🇷 BR 03 - xiaohe
-  type: vless
-  server: 154.194.12.40
-  port: 8880
-  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /?ed=2560
-    headers:
-      Host: vms.lifetime35.workers.dev
-- name: 🇧🇷 BR 04 - xiaohe
-  type: vless
-  server: 185.148.106.30
-  port: 8880
-  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: vms.lifetime54.workers.dev
+      Host: br-gru.xhs152.shop
 proxy-groups:
 - name: PROXIES
   type: select
   proxies:
   - AUTO
   - 🇧🇷 BR 01 - xiaohe
-  - 🇧🇷 BR 02 - xiaohe
-  - 🇧🇷 BR 03 - xiaohe
-  - 🇧🇷 BR 04 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
   interval: 300
   proxies:
   - 🇧🇷 BR 01 - xiaohe
-  - 🇧🇷 BR 02 - xiaohe
-  - 🇧🇷 BR 03 - xiaohe
-  - 🇧🇷 BR 04 - xiaohe
 rules:
 - MATCH,PROXIES
