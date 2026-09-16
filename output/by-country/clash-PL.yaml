@@ -5,41 +5,54 @@ mode: rule
 log-level: info
 proxies:
 - name: 🇵🇱 PL 01 - xiaohe
+  type: vless
+  server: 104.25.146.77
+  port: 443
+  uuid: e6cc4788-3c45-4df1-94f3-8303504a65bf
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: khoda.ak-khoda.workers.dev
+  network: ws
+  ws-opts:
+    path: /sync
+    headers:
+      Host: khoda.ak-khoda.workers.dev
+- name: 🇵🇱 PL 02 - xiaohe
   type: ss
   server: 194.61.121.93
   port: 7538
   cipher: chacha20-ietf-poly1305
   password: U9YAoqBgg5VyGBc6vQv1sN
   udp: true
-- name: 🇵🇱 PL 02 - xiaohe
-  type: vless
-  server: 94.183.157.174
-  port: 8090
-  uuid: 818eaf39-544f-4d1d-977e-87be7e33eecf
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: askuhgfdsg.space.coupons
-  network: ws
-  ws-opts:
-    path: /ws
-    headers:
-      Host: askuhgfdsg.space.coupons
 - name: 🇵🇱 PL 03 - xiaohe
   type: vless
-  server: 94.183.157.223
-  port: 8090
-  uuid: 818eaf39-544f-4d1d-977e-87be7e33eecf
+  server: 188.114.97.6
+  port: 8080
+  uuid: e6cc4788-3c45-4df1-94f3-8303504a65bf
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /sync
+    headers:
+      Host: khoda.ak-khoda.workers.dev
+- name: 🇵🇱 PL 04 - xiaohe
+  type: vless
+  server: 103.167.234.26
+  port: 443
+  uuid: b940be1b-3998-45d2-bf7b-06e7b6c4987a
   udp: true
   tls: true
   skip-cert-verify: true
-  servername: askuhgfdsg.space.coupons
+  servername: kkkk-8oc.pages.dev
   network: ws
   ws-opts:
-    path: /ws
+    path: /?ed=2048
     headers:
-      Host: askuhgfdsg.space.coupons
-- name: 🇵🇱 PL 04 - xiaohe
+      Host: kkkk-8oc.pages.dev
+- name: 🇵🇱 PL 05 - xiaohe
   type: vless
   server: 94.183.157.243
   port: 8090
@@ -53,6 +66,90 @@ proxies:
     path: /ws
     headers:
       Host: askuhgfdsg.space.coupons
+- name: 🇵🇱 PL 06 - xiaohe
+  type: vless
+  server: 94.183.157.174
+  port: 8090
+  uuid: 818eaf39-544f-4d1d-977e-87be7e33eecf
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: askuhgfdsg.space.coupons
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: askuhgfdsg.space.coupons
+- name: 🇵🇱 PL 07 - xiaohe
+  type: vless
+  server: 104.25.146.77
+  port: 443
+  uuid: e6cc4788-3c45-4df1-94f3-8303504a65bf
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: khoda.ak-khoda.workers.dev
+  network: ws
+  ws-opts:
+    path: /sync
+    headers:
+      Host: khoda.ak-khoda.workers.dev
+- name: 🇵🇱 PL 08 - xiaohe
+  type: vless
+  server: 104.25.22.24
+  port: 443
+  uuid: e6cc4788-3c45-4df1-94f3-8303504a65bf
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: khoda.ak-khoda.workers.dev
+  network: ws
+  ws-opts:
+    path: /sync
+    headers:
+      Host: khoda.ak-khoda.workers.dev
+- name: 🇵🇱 PL 09 - xiaohe
+  type: vless
+  server: 94.183.157.223
+  port: 8090
+  uuid: 818eaf39-544f-4d1d-977e-87be7e33eecf
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: askuhgfdsg.space.coupons
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: askuhgfdsg.space.coupons
+- name: 🇵🇱 PL 10 - xiaohe
+  type: vless
+  server: 104.17.247.68
+  port: 443
+  uuid: e6cc4788-3c45-4df1-94f3-8303504a65bf
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: khoda.ak-khoda.workers.dev
+  network: ws
+  ws-opts:
+    path: /sync
+    headers:
+      Host: khoda.ak-khoda.workers.dev
+- name: 🇵🇱 PL 11 - xiaohe
+  type: vless
+  server: 104.17.247.68
+  port: 443
+  uuid: e6cc4788-3c45-4df1-94f3-8303504a65bf
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: khoda.ak-khoda.workers.dev
+  network: ws
+  ws-opts:
+    path: /sync
+    headers:
+      Host: khoda.ak-khoda.workers.dev
 proxy-groups:
 - name: PROXIES
   type: select
@@ -62,6 +159,13 @@ proxy-groups:
   - 🇵🇱 PL 02 - xiaohe
   - 🇵🇱 PL 03 - xiaohe
   - 🇵🇱 PL 04 - xiaohe
+  - 🇵🇱 PL 05 - xiaohe
+  - 🇵🇱 PL 06 - xiaohe
+  - 🇵🇱 PL 07 - xiaohe
+  - 🇵🇱 PL 08 - xiaohe
+  - 🇵🇱 PL 09 - xiaohe
+  - 🇵🇱 PL 10 - xiaohe
+  - 🇵🇱 PL 11 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -71,5 +175,12 @@ proxy-groups:
   - 🇵🇱 PL 02 - xiaohe
   - 🇵🇱 PL 03 - xiaohe
   - 🇵🇱 PL 04 - xiaohe
+  - 🇵🇱 PL 05 - xiaohe
+  - 🇵🇱 PL 06 - xiaohe
+  - 🇵🇱 PL 07 - xiaohe
+  - 🇵🇱 PL 08 - xiaohe
+  - 🇵🇱 PL 09 - xiaohe
+  - 🇵🇱 PL 10 - xiaohe
+  - 🇵🇱 PL 11 - xiaohe
 rules:
 - MATCH,PROXIES

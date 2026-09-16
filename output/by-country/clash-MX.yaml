@@ -32,6 +32,19 @@ proxies:
     path: /vless/
     headers:
       Host: ul-mexico1.09vpn.com
+- name: 🇲🇽 MX 03 - xiaohe
+  type: vless
+  server: 160.153.1.30
+  port: 8880
+  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: vms.lifetime61.workers.dev
 proxy-groups:
 - name: PROXIES
   type: select
@@ -39,6 +52,7 @@ proxy-groups:
   - AUTO
   - 🇲🇽 MX 01 - xiaohe
   - 🇲🇽 MX 02 - xiaohe
+  - 🇲🇽 MX 03 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -46,5 +60,6 @@ proxy-groups:
   proxies:
   - 🇲🇽 MX 01 - xiaohe
   - 🇲🇽 MX 02 - xiaohe
+  - 🇲🇽 MX 03 - xiaohe
 rules:
 - MATCH,PROXIES
