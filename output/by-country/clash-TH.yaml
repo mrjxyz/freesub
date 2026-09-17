@@ -33,7 +33,7 @@ proxies:
       Host: aIs.SpEeDtEsT.nEt
 - name: 🇹🇭 TH 03 - xiaohe
   type: vless
-  server: 104.16.10.185
+  server: 104.16.10.2
   port: 443
   uuid: 3c52e091-6714-4915-949f-2149fe69951b
   udp: true
@@ -60,7 +60,7 @@ proxies:
       Host: aIs.SpEeDtEsT.nEt
 - name: 🇹🇭 TH 05 - xiaohe
   type: vless
-  server: 104.18.26.90
+  server: 104.16.111.193
   port: 443
   uuid: 3c52e091-6714-4915-949f-2149fe69951b
   udp: true
@@ -74,7 +74,7 @@ proxies:
       Host: v2ray.simspeedup.com
 - name: 🇹🇭 TH 06 - xiaohe
   type: vless
-  server: 162.159.192.125
+  server: 188.114.97.6
   port: 443
   uuid: 3c52e091-6714-4915-949f-2149fe69951b
   udp: true
@@ -88,7 +88,7 @@ proxies:
       Host: v2ray.simspeedup.com
 - name: 🇹🇭 TH 07 - xiaohe
   type: vless
-  server: 104.16.111.193
+  server: 104.16.10.185
   port: 443
   uuid: 3c52e091-6714-4915-949f-2149fe69951b
   udp: true
@@ -101,19 +101,20 @@ proxies:
     headers:
       Host: v2ray.simspeedup.com
 - name: 🇹🇭 TH 08 - xiaohe
-  type: vless
-  server: 43.133.110.81
-  port: 443
-  uuid: 77777777-8a3e-6666-b6d1-a9c5f0e8b3a2
+  type: vmess
+  server: 118.193.57.167
+  port: 49667
+  uuid: d46bf492-45f4-4c33-82d1-ea2a1cb54eb6
+  alterId: 0
+  cipher: auto
   udp: true
-  tls: true
+  tls: false
   skip-cert-verify: true
-  servername: faxf32gkfzoxqv.fx6hsv0.ccwu.cc
   network: ws
   ws-opts:
-    path: /?TELEGRAM-MARAMBASHI_MARAMBASHI?ed=512
+    path: /d46bf492
     headers:
-      Host: faxf32gkfzoxqv.fx6hsv0.ccwu.cc
+      Host: ''
 - name: 🇹🇭 TH 09 - xiaohe
   type: vmess
   server: 118.193.57.167
@@ -130,20 +131,19 @@ proxies:
     headers:
       Host: ''
 - name: 🇹🇭 TH 10 - xiaohe
-  type: vmess
-  server: 118.193.57.167
-  port: 49667
-  uuid: d46bf492-45f4-4c33-82d1-ea2a1cb54eb6
-  alterId: 0
-  cipher: auto
+  type: vless
+  server: 104.18.26.90
+  port: 443
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
   udp: true
-  tls: false
+  tls: true
   skip-cert-verify: true
+  servername: v2ray.simspeedup.com
   network: ws
   ws-opts:
-    path: /d46bf492
+    path: /ws
     headers:
-      Host: ''
+      Host: v2ray.simspeedup.com
 proxy-groups:
 - name: PROXIES
   type: select

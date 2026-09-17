@@ -6,20 +6,6 @@ log-level: info
 proxies:
 - name: 🇬🇷 GR 01 - xiaohe
   type: vless
-  server: 91.186.218.227
-  port: 4443
-  uuid: 97423fab-93df-4061-be7a-e6ca8d7eb3d7
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: 5iv93opy8jus9z.bjo5si35c9i9ud4242fado49188obkoiermjuxj7zgxu.workers.dev
-  network: ws
-  ws-opts:
-    path: /@Marisa_kristi
-    headers:
-      Host: 5iv93opy8jus9z.bjo5si35c9i9ud4242fado49188obkoiermjuxj7zgxu.workers.dev
-- name: 🇬🇷 GR 02 - xiaohe
-  type: vless
   server: 91.186.216.100
   port: 7005
   uuid: ac64aec6-85ee-4fc7-b34b-60a7bcf236ec
@@ -36,13 +22,11 @@ proxy-groups:
   proxies:
   - AUTO
   - 🇬🇷 GR 01 - xiaohe
-  - 🇬🇷 GR 02 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
   interval: 300
   proxies:
   - 🇬🇷 GR 01 - xiaohe
-  - 🇬🇷 GR 02 - xiaohe
 rules:
 - MATCH,PROXIES

@@ -4,11 +4,13 @@ allow-lan: true
 mode: rule
 log-level: info
 proxies:
-- name: 🇨🇴 CO 01 - xiaohe
-  type: vless
-  server: 157.137.226.173
-  port: 62145
-  uuid: 8fb65472-5957-4f64-ba2d-b5812b2f155a
+- name: 🇭🇰 中国香港 (Hong Kong) 01 (家宽) - xiaohe
+  type: vmess
+  server: dog-hk.kunlun01dns.com
+  port: 21022
+  uuid: 9464ca40-dd75-3742-a628-d931a9f413b2
+  alterId: 0
+  cipher: auto
   udp: true
   tls: false
   skip-cert-verify: true
@@ -17,12 +19,12 @@ proxy-groups:
   type: select
   proxies:
   - AUTO
-  - 🇨🇴 CO 01 - xiaohe
+  - 🇭🇰 中国香港 (Hong Kong) 01 (家宽) - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
   interval: 300
   proxies:
-  - 🇨🇴 CO 01 - xiaohe
+  - 🇭🇰 中国香港 (Hong Kong) 01 (家宽) - xiaohe
 rules:
 - MATCH,PROXIES
