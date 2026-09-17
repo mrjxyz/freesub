@@ -6,22 +6,47 @@ log-level: info
 proxies:
 - name: 🇸🇪 SE 01 - xiaohe
   type: ss
+  server: 70.34.212.124
+  port: 8388
+  cipher: aes-256-gcm
+  password: AxIYWtskJWIIaefW
+  udp: true
+- name: 🇸🇪 SE 02 - xiaohe
+  type: ss
   server: 51.170.179.166
   port: 45819
   cipher: 2022-blake3-chacha20-poly1305
   password: 4pGFK0x/lqudD4LJU8isjFCNxlw04AnKc72lFxetSZU=
   udp: true
+- name: 🇸🇪 SE 03 - xiaohe
+  type: vless
+  server: www.visa.com.hk
+  port: 443
+  uuid: afc4e46d-9720-4355-93aa-ba7f892c857e
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: se-sto.xhs152.shop
+  network: ws
+  ws-opts:
+    path: /announcement?ed=2048
+    headers:
+      Host: se-sto.xhs152.shop
 proxy-groups:
 - name: PROXIES
   type: select
   proxies:
   - AUTO
   - 🇸🇪 SE 01 - xiaohe
+  - 🇸🇪 SE 02 - xiaohe
+  - 🇸🇪 SE 03 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
   interval: 300
   proxies:
   - 🇸🇪 SE 01 - xiaohe
+  - 🇸🇪 SE 02 - xiaohe
+  - 🇸🇪 SE 03 - xiaohe
 rules:
 - MATCH,PROXIES
