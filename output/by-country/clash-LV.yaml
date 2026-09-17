@@ -8,7 +8,7 @@ proxies:
   type: vless
   server: atomic-prase23893.my-vm.work
   port: 8088
-  uuid: tmp_user
+  uuid: f7c74a35-1da0-5097-9fa7-a20735610ac1
   udp: true
   tls: false
   skip-cert-verify: true

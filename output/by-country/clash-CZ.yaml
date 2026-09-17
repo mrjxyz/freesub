@@ -1,0 +1,81 @@
+port: 7890
+socks-port: 7891
+allow-lan: true
+mode: rule
+log-level: info
+proxies:
+- name: 🇨🇿 CZ 01 - xiaohe
+  type: vless
+  server: 188.114.97.1
+  port: 443
+  uuid: af0db32b-2cb0-48c7-b04e-96003f8c2369
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: dl2uF-IVdEZilz3e86Rk18.HHvt37tjM2xboSql5hXOGN-Y.woRKerS.Dev
+  network: ws
+  ws-opts:
+    path: /vl/S4yuZSVQY6NKjQqfwbBxw58?ed=2560
+    headers:
+      Host: dl2uf-ivdezilz3e86rk18.hhvt37tjm2xbosql5hxogn-y.workers.dev
+- name: 🇨🇿 CZ 02 - xiaohe
+  type: vless
+  server: restless-moon-dd68ridam-too-in-mamlekat.hgtghff67tdfhut3.workers.dev
+  port: 2053
+  uuid: dc1e9f00-c064-4870-9bfc-463db50257d7
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: RESTlESs-MoON-dD68RidaM-tOo-In-MAmLEkat.hGtghFF67tdFHUt3.WORkerS.DEV
+  network: ws
+  ws-opts:
+    path: /eyJqdW5rIjoicVkwaG9XUUQyUDhzRkZ5UiIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560
+    headers:
+      Host: restless-moon-dd68ridam-too-in-mamlekat.hgtghff67tdfhut3.workers.dev
+- name: 🇨🇿 CZ 03 - xiaohe
+  type: vless
+  server: www.speedtest.net
+  port: 443
+  uuid: 0432902e-6604-40cd-bbd0-57ab4e5d909f
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: bPB-4dc4958B.hXjkcgHcHv.woRkeRs.deV
+  network: ws
+  ws-opts:
+    path: /eyJqdW5rIjoiOENNZnB6WTgiLCJwcm90b2NvbCI6InZsIiwibW9kZSI6InByb3h5aXAiLCJwYW5lbElQcyI6W119
+    headers:
+      Host: bpb-4dc4958b.hxjkcghchv.workers.dev
+- name: 🇨🇿 CZ 04 - xiaohe
+  type: vless
+  server: 192.169.222.40
+  port: 8880
+  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: vms.lifetime40.workers.dev
+proxy-groups:
+- name: PROXIES
+  type: select
+  proxies:
+  - AUTO
+  - 🇨🇿 CZ 01 - xiaohe
+  - 🇨🇿 CZ 02 - xiaohe
+  - 🇨🇿 CZ 03 - xiaohe
+  - 🇨🇿 CZ 04 - xiaohe
+- name: AUTO
+  type: url-test
+  url: https://www.google.com/generate_204
+  interval: 300
+  proxies:
+  - 🇨🇿 CZ 01 - xiaohe
+  - 🇨🇿 CZ 02 - xiaohe
+  - 🇨🇿 CZ 03 - xiaohe
+  - 🇨🇿 CZ 04 - xiaohe
+rules:
+- MATCH,PROXIES
