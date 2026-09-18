@@ -6,6 +6,46 @@ log-level: info
 proxies:
 - name: 🇹🇭 TH 01 - xiaohe
   type: vless
+  server: v2ray.simspeedup.com
+  port: 80
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: v2ray.simspeedup.com
+- name: 🇹🇭 TH 02 - xiaohe
+  type: vless
+  server: 104.21.34.106
+  port: 443
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: v2ray.simspeedup.com
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: v2ray.simspeedup.com
+- name: 🇹🇭 TH 03 - xiaohe
+  type: vless
+  server: 103.86.49.57
+  port: 80
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: aIs.SpEeDtEsT.nEt
+- name: 🇹🇭 TH 04 - xiaohe
+  type: vless
   server: 162.159.192.125
   port: 443
   uuid: 3c52e091-6714-4915-949f-2149fe69951b
@@ -18,49 +58,9 @@ proxies:
     path: /ws
     headers:
       Host: v2ray.simspeedup.com
-- name: 🇹🇭 TH 02 - xiaohe
-  type: vless
-  server: 43.159.4.80
-  port: 443
-  uuid: d342d11e-d424-4583-b36e-524ab1f0afa4
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: cdn8848.776676.xyz
-  network: ws
-  ws-opts:
-    path: /episode/files?ed=2560fp=chrome
-    headers:
-      Host: cdn8848.776676.xyz
-- name: 🇹🇭 TH 03 - xiaohe
-  type: vless
-  server: 104.26.13.40
-  port: 8880
-  uuid: 9d45d137-9892-4a83-a04a-f30b4da28243
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /pyip=ProxyIP.SG.CMLiussss.net
-    headers:
-      Host: broken-wave-8a45.483.workers.dev
-- name: 🇹🇭 TH 04 - xiaohe
-  type: vless
-  server: tiny-lake-bbf1.369-766.workers.dev
-  port: 8880
-  uuid: 3adac494-0eb1-4d89-a187-b2181691444d
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /pyip=ProxyIP.SG.CMLiussss.net
-    headers:
-      Host: tiny-lake-bbf1.369-766.workers.dev
 - name: 🇹🇭 TH 05 - xiaohe
   type: vless
-  server: 188.114.97.6
+  server: 104.16.10.2
   port: 443
   uuid: 3c52e091-6714-4915-949f-2149fe69951b
   udp: true
@@ -87,7 +87,7 @@ proxies:
       Host: aIs.SpEeDtEsT.nEt
 - name: 🇹🇭 TH 07 - xiaohe
   type: vless
-  server: 104.19.32.166
+  server: 104.16.111.193
   port: 443
   uuid: 3c52e091-6714-4915-949f-2149fe69951b
   udp: true
@@ -101,21 +101,36 @@ proxies:
       Host: v2ray.simspeedup.com
 - name: 🇹🇭 TH 08 - xiaohe
   type: vless
-  server: 103.86.49.57
-  port: 80
+  server: 104.18.26.90
+  port: 443
   uuid: 3c52e091-6714-4915-949f-2149fe69951b
   udp: true
-  tls: false
+  tls: true
   skip-cert-verify: true
+  servername: v2ray.simspeedup.com
   network: ws
   ws-opts:
     path: /ws
     headers:
-      Host: aIs.SpEeDtEsT.nEt
+      Host: v2ray.simspeedup.com
 - name: 🇹🇭 TH 09 - xiaohe
   type: vless
-  server: 152.67.101.72
-  port: 23010
+  server: 104.19.32.166
+  port: 443
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: v2ray.simspeedup.com
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: v2ray.simspeedup.com
+- name: 🇹🇭 TH 10 - xiaohe
+  type: vless
+  server: 159.65.8.14
+  port: 443
   uuid: d342d11e-d424-4583-b36e-524ab1f0afa4
   udp: true
   tls: true
@@ -123,10 +138,10 @@ proxies:
   servername: cdn8848.776676.xyz
   network: ws
   ws-opts:
-    path: /
+    path: /magnet?ed=2560
     headers:
       Host: cdn8848.776676.xyz
-- name: 🇹🇭 TH 10 - xiaohe
+- name: 🇹🇭 TH 11 - xiaohe
   type: vmess
   server: 118.193.57.167
   port: 49667
@@ -141,7 +156,22 @@ proxies:
     path: /d46bf492
     headers:
       Host: ''
-- name: 🇹🇭 TH 11 - xiaohe
+- name: 🇹🇭 TH 12 - xiaohe
+  type: vmess
+  server: 118.193.57.167
+  port: 49667
+  uuid: d46bf492-45f4-4c33-82d1-ea2a1cb54eb6
+  alterId: 0
+  cipher: auto
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /d46bf492
+    headers:
+      Host: ''
+- name: 🇹🇭 TH 13 - xiaohe
   type: vmess
   server: 118.193.57.167
   port: 49667
@@ -172,6 +202,8 @@ proxy-groups:
   - 🇹🇭 TH 09 - xiaohe
   - 🇹🇭 TH 10 - xiaohe
   - 🇹🇭 TH 11 - xiaohe
+  - 🇹🇭 TH 12 - xiaohe
+  - 🇹🇭 TH 13 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -188,5 +220,7 @@ proxy-groups:
   - 🇹🇭 TH 09 - xiaohe
   - 🇹🇭 TH 10 - xiaohe
   - 🇹🇭 TH 11 - xiaohe
+  - 🇹🇭 TH 12 - xiaohe
+  - 🇹🇭 TH 13 - xiaohe
 rules:
 - MATCH,PROXIES

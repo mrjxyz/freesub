@@ -26,6 +26,20 @@ proxies:
     path: /
     headers:
       Host: free.sahanwickramasinghe.me
+- name: 🇱🇰 LK 03 - xiaohe
+  type: vless
+  server: free.sahanwickramasinghe.me
+  port: 8443
+  uuid: c73ffa6e-a102-4984-9176-3e6242c1925e
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: zoom.us
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: free.sahanwickramasinghe.me
 proxy-groups:
 - name: PROXIES
   type: select
@@ -33,6 +47,7 @@ proxy-groups:
   - AUTO
   - 🇱🇰 LK 01 - xiaohe
   - 🇱🇰 LK 02 - xiaohe
+  - 🇱🇰 LK 03 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -40,5 +55,6 @@ proxy-groups:
   proxies:
   - 🇱🇰 LK 01 - xiaohe
   - 🇱🇰 LK 02 - xiaohe
+  - 🇱🇰 LK 03 - xiaohe
 rules:
 - MATCH,PROXIES

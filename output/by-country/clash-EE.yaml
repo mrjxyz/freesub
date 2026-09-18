@@ -20,6 +20,15 @@ proxies:
 - name: 🇪🇪 EE 02 - xiaohe
   type: vless
   server: 94.183.170.135
+  port: 8443
+  uuid: 06c4e938-2954-478f-a870-ca1b163e30e9
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: estproxy4.lockdwn.com
+- name: 🇪🇪 EE 03 - xiaohe
+  type: vless
+  server: 94.183.170.135
   port: 443
   uuid: 06c4e938-2954-478f-a870-ca1b163e30e9
   udp: true
@@ -30,20 +39,11 @@ proxies:
     path: /
     headers:
       Host: 94.183.170.135
-- name: 🇪🇪 EE 03 - xiaohe
-  type: vless
-  server: 94.183.170.135
-  port: 8443
-  uuid: 06c4e938-2954-478f-a870-ca1b163e30e9
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: estproxy4.lockdwn.com
 - name: 🇪🇪 EE 04 - xiaohe
   type: vless
   server: 212.87.190.124
   port: 3
-  uuid: b20f2a61-7ce6-41b8-9892-6569ab99477e
+  uuid: 6049e972-419e-43bc-932c-4032be6d1b5b
   udp: true
   tls: false
   skip-cert-verify: true
@@ -65,13 +65,6 @@ proxies:
   tls: true
   skip-cert-verify: true
   servername: estproxy4.lockdwn.com
-- name: 🇪🇪 EE 07 - xiaohe
-  type: ss
-  server: 212.87.190.124
-  port: 99
-  cipher: chacha20-ietf-poly1305
-  password: 6nQnSKAxCLJSZbg7KA94QA
-  udp: true
 proxy-groups:
 - name: PROXIES
   type: select
@@ -83,7 +76,6 @@ proxy-groups:
   - 🇪🇪 EE 04 - xiaohe
   - 🇪🇪 EE 05 - xiaohe
   - 🇪🇪 EE 06 - xiaohe
-  - 🇪🇪 EE 07 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -95,6 +87,5 @@ proxy-groups:
   - 🇪🇪 EE 04 - xiaohe
   - 🇪🇪 EE 05 - xiaohe
   - 🇪🇪 EE 06 - xiaohe
-  - 🇪🇪 EE 07 - xiaohe
 rules:
 - MATCH,PROXIES
