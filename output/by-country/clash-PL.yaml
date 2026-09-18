@@ -13,7 +13,7 @@ proxies:
   udp: true
 - name: 🇵🇱 PL 02 - xiaohe
   type: vless
-  server: api2.maxonelove.com
+  server: 144.31.5.46
   port: 443
   uuid: ad297a2b-ae17-4d2d-8fce-e2eafb89b145
   udp: true
