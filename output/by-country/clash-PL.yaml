@@ -6,7 +6,7 @@ log-level: info
 proxies:
 - name: 🇵🇱 PL 01 - xiaohe
   type: vless
-  server: 104.25.146.77
+  server: 104.17.247.68
   port: 443
   uuid: e6cc4788-3c45-4df1-94f3-8303504a65bf
   udp: true
@@ -20,13 +20,12 @@ proxies:
       Host: khoda.ak-khoda.workers.dev
 - name: 🇵🇱 PL 02 - xiaohe
   type: vless
-  server: 104.25.22.24
-  port: 443
+  server: 188.114.97.6
+  port: 8080
   uuid: e6cc4788-3c45-4df1-94f3-8303504a65bf
   udp: true
-  tls: true
+  tls: false
   skip-cert-verify: true
-  servername: khoda.ak-khoda.workers.dev
   network: ws
   ws-opts:
     path: /sync
@@ -41,7 +40,7 @@ proxies:
   udp: true
 - name: 🇵🇱 PL 04 - xiaohe
   type: vless
-  server: 104.17.247.68
+  server: 104.25.22.24
   port: 443
   uuid: e6cc4788-3c45-4df1-94f3-8303504a65bf
   udp: true
@@ -55,12 +54,13 @@ proxies:
       Host: khoda.ak-khoda.workers.dev
 - name: 🇵🇱 PL 05 - xiaohe
   type: vless
-  server: 188.114.97.6
-  port: 8080
+  server: 104.17.247.68
+  port: 443
   uuid: e6cc4788-3c45-4df1-94f3-8303504a65bf
   udp: true
-  tls: false
+  tls: true
   skip-cert-verify: true
+  servername: khoda.ak-khoda.workers.dev
   network: ws
   ws-opts:
     path: /sync
