@@ -1,0 +1,49 @@
+port: 7890
+socks-port: 7891
+allow-lan: true
+mode: rule
+log-level: info
+proxies:
+- name: 🇮🇶 IQ 01 - xiaohe
+  type: vless
+  server: 104.21.82.226
+  port: 443
+  uuid: 36a857e4-f3d4-43aa-8b90-d7da849da989
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: 002.Inc-ElectROcElL-001-002.WoRKERS.DEV
+  network: ws
+  ws-opts:
+    path: /eyJqdW5rIjoib0RnakxTZUZvOSIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560
+    headers:
+      Host: 002.inc-electrocell-001-002.workers.dev
+- name: 🇮🇶 IQ 02 - xiaohe
+  type: vless
+  server: 188.114.97.6
+  port: 8080
+  uuid: 0836463b-214f-4af6-aa85-85a56a62388e
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /8eaZJhRwB5zzDy81
+    headers:
+      Host: d2127A49-flAT-wooD-C4B5.mILia-AkbARpOor.WorkERs.dEV
+proxy-groups:
+- name: PROXIES
+  type: select
+  proxies:
+  - AUTO
+  - 🇮🇶 IQ 01 - xiaohe
+  - 🇮🇶 IQ 02 - xiaohe
+- name: AUTO
+  type: url-test
+  url: https://www.google.com/generate_204
+  interval: 300
+  proxies:
+  - 🇮🇶 IQ 01 - xiaohe
+  - 🇮🇶 IQ 02 - xiaohe
+rules:
+- MATCH,PROXIES

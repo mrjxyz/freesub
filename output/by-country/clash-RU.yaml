@@ -5,26 +5,31 @@ mode: rule
 log-level: info
 proxies:
 - name: 🇷🇺 俄罗斯 (Russia) 01 - xiaohe
-  type: ss
-  server: 176.32.35.44
-  port: 50111
-  cipher: aes-256-gcm
-  password: 6b39ae3234dfd68b
-  udp: true
-- name: 🇷🇺 俄罗斯 (Russia) 02 - xiaohe
   type: vless
-  server: 46.8.200.91
-  port: 443
-  uuid: b8201bab-fa6c-4f6e-b289-b5da660c6f69
+  server: 77.232.140.40
+  port: 8880
+  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
   udp: true
-  tls: true
+  tls: false
   skip-cert-verify: true
-  servername: cf3.rumedia-cdn.com
   network: ws
   ws-opts:
-    path: /cdn/v3/live
+    path: /?ed
     headers:
-      Host: cf3.rumedia-cdn.com
+      Host: vms.lifetime61.workers.dev
+- name: 🇷🇺 俄罗斯 (Russia) 02 - xiaohe
+  type: vless
+  server: 185.148.107.40
+  port: 8880
+  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: vms.lifetime55.workers.dev
 - name: 🇷🇺 俄罗斯 (Russia) 03 - xiaohe
   type: vless
   server: 46.8.200.91
@@ -39,6 +44,210 @@ proxies:
     path: /cdn/v3/live
     headers:
       Host: cf3.rumedia-cdn.com
+- name: 🇷🇺 俄罗斯 (Russia) 04 - xiaohe
+  type: vless
+  server: 46.8.200.91
+  port: 443
+  uuid: b8201bab-fa6c-4f6e-b289-b5da660c6f69
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: cf3.rumedia-cdn.com
+  network: ws
+  ws-opts:
+    path: /cdn/v3/live
+    headers:
+      Host: cf3.rumedia-cdn.com
+- name: 🇷🇺 俄罗斯 (Russia) 05 - xiaohe
+  type: ss
+  server: 176.32.35.44
+  port: 50111
+  cipher: aes-256-gcm
+  password: 6b39ae3234dfd68b
+  udp: true
+- name: 🇷🇺 俄罗斯 (Russia) 06 - xiaohe
+  type: vless
+  server: 162.159.0.169
+  port: 2086
+  uuid: 47fcef29-ab4e-4aa6-932b-d95a18f28a4e
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560security=tlssecurity=tls
+    headers:
+      Host: 8nj2r.2k8t.f88.hh.vavava.kdns.fr
+- name: 🇷🇺 俄罗斯 (Russia) 07 - xiaohe
+  type: vless
+  server: 45.142.120.40
+  port: 8880
+  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: vms.lifetime08.workers.dev
+- name: 🇷🇺 俄罗斯 (Russia) 08 - xiaohe
+  type: vless
+  server: 185.148.106.50
+  port: 8880
+  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: vms.lifetime54.workers.dev
+- name: 🇷🇺 俄罗斯 (Russia) 09 - xiaohe
+  type: vless
+  server: 172.67.148.26
+  port: 80
+  uuid: 95de071f-747c-dc07-36ac-5c0854a9e50e
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /sync
+    headers:
+      Host: restless-boat-ebf2.moha102030.workers.dev
+- name: 🇷🇺 俄罗斯 (Russia) 10 - xiaohe
+  type: vless
+  server: 89.116.180.40
+  port: 8880
+  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560
+    headers:
+      Host: vms.lifetime09.workers.dev
+- name: 🇷🇺 俄罗斯 (Russia) 11 - xiaohe
+  type: vless
+  server: 185.148.104.30
+  port: 8880
+  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: vms.lifetime51.workers.dev
+- name: 🇷🇺 俄罗斯 (Russia) 12 - xiaohe
+  type: vless
+  server: 162.159.45.19
+  port: 2086
+  uuid: 47fcef29-ab4e-4aa6-932b-d95a18f28a4e
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560security=tls
+    headers:
+      Host: 8nj2r.2k8t.f88.hh.vavava.kdns.fr
+- name: 🇷🇺 俄罗斯 (Russia) 13 - xiaohe
+  type: vless
+  server: 162.159.38.127
+  port: 2052
+  uuid: 47fcef29-ab4e-4aa6-932b-d95a18f28a4e
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /?ed=2560security=tls
+    headers:
+      Host: 8nj2r.2k8t.f88.hh.vavava.kdns.fr
+- name: 🇷🇺 俄罗斯 (Russia) 14 - xiaohe
+  type: vless
+  server: 194.53.53.30
+  port: 8880
+  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: vms.lifetime51.workers.dev
+- name: 🇷🇺 俄罗斯 (Russia) 15 - xiaohe
+  type: vless
+  server: 104.16.107.139
+  port: 8880
+  uuid: 24c2a873-4584-4c53-8679-61029682d0bb
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /pyip
+    headers:
+      Host: soft-thunder-bc22.111-f59.workers.dev
+- name: 🇷🇺 俄罗斯 (Russia) 16 - xiaohe
+  type: vless
+  server: lucky-sunset-d12e.201-98c.workers.dev
+  port: 8880
+  uuid: ef770523-8eb5-403f-9e95-06b328719c87
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /pyip=ProxyIP.US.CMLiussss.net
+    headers:
+      Host: lucky-sunset-d12e.201-98c.workers.dev
+- name: 🇷🇺 俄罗斯 (Russia) 17 - xiaohe
+  type: vless
+  server: 104.21.12.116
+  port: 8880
+  uuid: 1cefdbfd-6032-43d5-ac13-f58b4498e2f7
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /pyip=ProxyIP.US.CMLiussss.net
+    headers:
+      Host: royal-salad-175d.306.workers.dev
+- name: 🇷🇺 俄罗斯 (Russia) 18 - xiaohe
+  type: vless
+  server: 188.114.97.6
+  port: 443
+  uuid: 2db92da9-8ffb-491b-81d6-6e8d50876020
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: bpb-01c11365.hjdbcvdbkv.workers.dev
+  network: ws
+  ws-opts:
+    path: /eyJqdW5rIjoiWlFRWlMwRDdLakVqMyIsInByb3RvY29sIjoidmwiLCJtb2RlIjoicHJveHlpcCIsInBhbmVsSVBzIjpbXX0=?ed=2560
+    headers:
+      Host: bpb-01c11365.hjdbcvdbkv.workers.dev
+- name: 🇷🇺 俄罗斯 (Russia) 19 - xiaohe
+  type: vless
+  server: 104.18.46.234
+  port: 8080
+  uuid: 47fcef29-ab4e-4aa6-932b-d95a18f28a4e
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: 8nj2r.2k8t.f88.hh.vavava.kdns.fr
 proxy-groups:
 - name: PROXIES
   type: select
@@ -47,6 +256,22 @@ proxy-groups:
   - 🇷🇺 俄罗斯 (Russia) 01 - xiaohe
   - 🇷🇺 俄罗斯 (Russia) 02 - xiaohe
   - 🇷🇺 俄罗斯 (Russia) 03 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 04 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 05 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 06 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 07 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 08 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 09 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 10 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 11 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 12 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 13 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 14 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 15 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 16 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 17 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 18 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 19 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -55,5 +280,21 @@ proxy-groups:
   - 🇷🇺 俄罗斯 (Russia) 01 - xiaohe
   - 🇷🇺 俄罗斯 (Russia) 02 - xiaohe
   - 🇷🇺 俄罗斯 (Russia) 03 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 04 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 05 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 06 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 07 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 08 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 09 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 10 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 11 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 12 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 13 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 14 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 15 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 16 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 17 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 18 - xiaohe
+  - 🇷🇺 俄罗斯 (Russia) 19 - xiaohe
 rules:
 - MATCH,PROXIES

@@ -20,7 +20,7 @@ proxies:
       Host: fx3h2kf8xn.fx6hsv0.ccwu.cc
 - name: 🇰🇷 韩国 (South Korea) 02 (家宽) - xiaohe
   type: vless
-  server: 172.67.217.240
+  server: 104.16.10.185
   port: 443
   uuid: 77777777-8a3e-6666-b6d1-a9c5f0e8b3a2
   udp: true
@@ -34,7 +34,7 @@ proxies:
       Host: fx3h2kf8xn.fx6hsv0.ccwu.cc
 - name: 🇰🇷 韩国 (South Korea) 03 (家宽) - xiaohe
   type: vless
-  server: 104.16.10.185
+  server: 172.67.217.240
   port: 443
   uuid: 77777777-8a3e-6666-b6d1-a9c5f0e8b3a2
   udp: true
@@ -48,21 +48,47 @@ proxies:
       Host: fx3h2kf8xn.fx6hsv0.ccwu.cc
 - name: 🇰🇷 韩国 (South Korea) 04 (家宽) - xiaohe
   type: vless
-  server: 172.67.217.240
-  port: 443
+  server: 172.66.170.53
+  port: 8880
+  uuid: 38ede46b-d237-4c76-9de1-a10738642adc
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /pyip=ProxyIP.KR.CMLiussss.net
+    headers:
+      Host: summer-hat-ba5c.430.workers.dev
+- name: 🇰🇷 韩国 (South Korea) 05 (家宽) - xiaohe
+  type: vless
+  server: 104.21.88.129
+  port: 8880
+  uuid: d829cf8d-0a32-4e60-bcc3-a03fb4658ea4
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /pyip
+    headers:
+      Host: shy-wind-a26f.182-104.workers.dev
+- name: 🇰🇷 韩国 (South Korea) 06 (家宽) - xiaohe
+  type: vless
+  server: cf.9999669.xyz
+  port: 2087
   uuid: 77777777-8a3e-6666-b6d1-a9c5f0e8b3a2
   udp: true
   tls: true
   skip-cert-verify: true
-  servername: fx3h2kf8xn.fx6hsv0.ccwu.cc
+  servername: faxf32gkfzoxqv.fx6hsv0.ccwu.cc
   network: ws
   ws-opts:
     path: /?ed=2560
     headers:
-      Host: fx3h2kf8xn.fx6hsv0.ccwu.cc
-- name: 🇰🇷 韩国 (South Korea) 05 (家宽) - xiaohe
+      Host: faxf32gkfzoxqv.fx6hsv0.ccwu.cc
+- name: 🇰🇷 韩国 (South Korea) 07 (家宽) - xiaohe
   type: vless
-  server: 104.16.10.185
+  server: 172.67.217.240
   port: 443
   uuid: 77777777-8a3e-6666-b6d1-a9c5f0e8b3a2
   udp: true
@@ -84,6 +110,8 @@ proxy-groups:
   - 🇰🇷 韩国 (South Korea) 03 (家宽) - xiaohe
   - 🇰🇷 韩国 (South Korea) 04 (家宽) - xiaohe
   - 🇰🇷 韩国 (South Korea) 05 (家宽) - xiaohe
+  - 🇰🇷 韩国 (South Korea) 06 (家宽) - xiaohe
+  - 🇰🇷 韩国 (South Korea) 07 (家宽) - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -94,5 +122,7 @@ proxy-groups:
   - 🇰🇷 韩国 (South Korea) 03 (家宽) - xiaohe
   - 🇰🇷 韩国 (South Korea) 04 (家宽) - xiaohe
   - 🇰🇷 韩国 (South Korea) 05 (家宽) - xiaohe
+  - 🇰🇷 韩国 (South Korea) 06 (家宽) - xiaohe
+  - 🇰🇷 韩国 (South Korea) 07 (家宽) - xiaohe
 rules:
 - MATCH,PROXIES
