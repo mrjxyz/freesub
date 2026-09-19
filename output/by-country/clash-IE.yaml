@@ -16,7 +16,7 @@ proxies:
   server: 20.238.35.153
   port: 443
   cipher: chacha20-ietf-poly1305
-  password: QMemWid6XGtnReuo
+  password: LB2J8MvTt2SBgD6o
   udp: true
 - name: 🇮🇪 IE 03 - xiaohe
   type: ss
