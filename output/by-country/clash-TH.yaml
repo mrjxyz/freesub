@@ -6,43 +6,6 @@ log-level: info
 proxies:
 - name: 🇹🇭 TH 01 - xiaohe
   type: vless
-  server: v2ray.simspeedup.com
-  port: 80
-  uuid: 3c52e091-6714-4915-949f-2149fe69951b
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /ws
-    headers:
-      Host: v2ray.simspeedup.com
-- name: 🇹🇭 TH 02 - xiaohe
-  type: vless
-  server: 34.15.162.1
-  port: 443
-  uuid: 2b1d0c2a-9c80-4b72-892e-93d0500b9210
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  reality-opts:
-    public-key: LklWoqMQz_TWiuLCUNRwHAKX1adVRSGMhtbo98fbDxw
-  servername: www.cloudflare.com
-  client-fingerprint: firefox
-- name: 🇹🇭 TH 03 - xiaohe
-  type: vless
-  server: 34.15.162.1
-  port: 443
-  uuid: 2b1d0c2a-9c80-4b72-892e-93d0500b9210
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  reality-opts:
-    public-key: LklWoqMQz_TWiuLCUNRwHAKX1adVRSGMhtbo98fbDxw
-  servername: www.cloudflare.com
-  client-fingerprint: chrome
-- name: 🇹🇭 TH 04 - xiaohe
-  type: vless
   server: 43.133.110.81
   port: 443
   uuid: 77777777-8a3e-6666-b6d1-a9c5f0e8b3a2
@@ -55,7 +18,7 @@ proxies:
     path: /?TELEGRAM-MARAMBASHI_MARAMBASHI?ed=512
     headers:
       Host: faxf32gkfzoxqv.fx6hsv0.ccwu.cc
-- name: 🇹🇭 TH 05 - xiaohe
+- name: 🇹🇭 TH 02 - xiaohe
   type: vless
   server: 103.86.49.57
   port: 80
@@ -68,21 +31,216 @@ proxies:
     path: /ws
     headers:
       Host: aIs.SpEeDtEsT.nEt
-- name: 🇹🇭 TH 06 - xiaohe
+- name: 🇹🇭 TH 03 - xiaohe
   type: vless
-  server: 43.159.4.80
+  server: 104.16.10.2
   port: 443
-  uuid: d342d11e-d424-4583-b36e-524ab1f0afa4
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
   udp: true
   tls: true
   skip-cert-verify: true
-  servername: cdn8848.776676.xyz
+  servername: v2ray.simspeedup.com
   network: ws
   ws-opts:
-    path: /episode/files?ed=2560
+    path: /ws
     headers:
-      Host: cdn8848.776676.xyz
+      Host: v2ray.simspeedup.com
+- name: 🇹🇭 TH 04 - xiaohe
+  type: vless
+  server: 103.86.49.57
+  port: 80
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: aIs.SpEeDtEsT.nEt
+- name: 🇹🇭 TH 05 - xiaohe
+  type: vless
+  server: 104.17.21.32
+  port: 8880
+  uuid: 4070e7c9-a412-4ed0-a5fa-fdb455451d2c
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /
+    headers:
+      Host: icy-sky-53f2.9-e8e.workers.dev
+- name: 🇹🇭 TH 06 - xiaohe
+  type: vless
+  server: 104.19.146.207
+  port: 8880
+  uuid: 2756d45c-2d91-4783-8114-ad1e128799ba
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /pyip=ProxyIP.SG.CMLiussss.net
+    headers:
+      Host: blue-breeze-e33c.261.workers.dev
 - name: 🇹🇭 TH 07 - xiaohe
+  type: vless
+  server: 34.15.162.1
+  port: 443
+  uuid: 2b1d0c2a-9c80-4b72-892e-93d0500b9210
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  reality-opts:
+    public-key: LklWoqMQz_TWiuLCUNRwHAKX1adVRSGMhtbo98fbDxw
+  servername: www.cloudflare.com
+  client-fingerprint: ios
+- name: 🇹🇭 TH 08 - xiaohe
+  type: vless
+  server: 34.15.162.1
+  port: 443
+  uuid: 2b1d0c2a-9c80-4b72-892e-93d0500b9210
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  reality-opts:
+    public-key: LklWoqMQz_TWiuLCUNRwHAKX1adVRSGMhtbo98fbDxw
+  servername: www.cloudflare.com
+  client-fingerprint: safari
+- name: 🇹🇭 TH 09 - xiaohe
+  type: vless
+  server: 34.15.162.1
+  port: 443
+  uuid: 2b1d0c2a-9c80-4b72-892e-93d0500b9210
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  reality-opts:
+    public-key: LklWoqMQz_TWiuLCUNRwHAKX1adVRSGMhtbo98fbDxw
+  servername: www.cloudflare.com
+  client-fingerprint: chrome
+- name: 🇹🇭 TH 10 - xiaohe
+  type: vless
+  server: 34.15.162.1
+  port: 443
+  uuid: 2b1d0c2a-9c80-4b72-892e-93d0500b9210
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  reality-opts:
+    public-key: LklWoqMQz_TWiuLCUNRwHAKX1adVRSGMhtbo98fbDxw
+  servername: www.cloudflare.com
+  client-fingerprint: qq
+- name: 🇹🇭 TH 11 - xiaohe
+  type: vless
+  server: 104.21.34.106
+  port: 443
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: v2ray.simspeedup.com
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: v2ray.simspeedup.com
+- name: 🇹🇭 TH 12 - xiaohe
+  type: vless
+  server: 104.16.111.193
+  port: 443
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: v2ray.simspeedup.com
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: v2ray.simspeedup.com
+- name: 🇹🇭 TH 13 - xiaohe
+  type: vless
+  server: 34.15.162.1
+  port: 443
+  uuid: 2b1d0c2a-9c80-4b72-892e-93d0500b9210
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  reality-opts:
+    public-key: LklWoqMQz_TWiuLCUNRwHAKX1adVRSGMhtbo98fbDxw
+  servername: www.cloudflare.com
+  client-fingerprint: chrome
+- name: 🇹🇭 TH 14 - xiaohe
+  type: vless
+  server: 34.15.162.1
+  port: 443
+  uuid: 2b1d0c2a-9c80-4b72-892e-93d0500b9210
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  reality-opts:
+    public-key: LklWoqMQz_TWiuLCUNRwHAKX1adVRSGMhtbo98fbDxw
+  servername: www.cloudflare.com
+  client-fingerprint: edge
+- name: 🇹🇭 TH 15 - xiaohe
+  type: vless
+  server: v2ray.simspeedup.com
+  port: 80
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: v2ray.simspeedup.com
+- name: 🇹🇭 TH 16 - xiaohe
+  type: vless
+  server: 104.18.26.90
+  port: 443
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: v2ray.simspeedup.com
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: v2ray.simspeedup.com
+- name: 🇹🇭 TH 17 - xiaohe
+  type: vless
+  server: 104.19.32.166
+  port: 443
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: v2ray.simspeedup.com
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: v2ray.simspeedup.com
+- name: 🇹🇭 TH 18 - xiaohe
+  type: vmess
+  server: 118.193.57.167
+  port: 49667
+  uuid: d46bf492-45f4-4c33-82d1-ea2a1cb54eb6
+  alterId: 0
+  cipher: auto
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /d46bf492
+    headers:
+      Host: ''
+- name: 🇹🇭 TH 19 - xiaohe
   type: vless
   server: V2rAy.SiMsPeEdUp.CoM
   port: 80
@@ -95,7 +253,22 @@ proxies:
     path: /ws
     headers:
       Host: aIs.SpEeDtEsT.nEt
-- name: 🇹🇭 TH 08 - xiaohe
+- name: 🇹🇭 TH 20 - xiaohe
+  type: vmess
+  server: 118.193.57.167
+  port: 49667
+  uuid: d46bf492-45f4-4c33-82d1-ea2a1cb54eb6
+  alterId: 0
+  cipher: auto
+  udp: true
+  tls: false
+  skip-cert-verify: true
+  network: ws
+  ws-opts:
+    path: /d46bf492
+    headers:
+      Host: ''
+- name: 🇹🇭 TH 21 - xiaohe
   type: vless
   server: 103.86.49.57
   port: 80
@@ -108,7 +281,21 @@ proxies:
     path: /ws
     headers:
       Host: aIs.SpEeDtEsT.nEt
-- name: 🇹🇭 TH 09 - xiaohe
+- name: 🇹🇭 TH 22 - xiaohe
+  type: vless
+  server: 188.114.97.6
+  port: 443
+  uuid: 3c52e091-6714-4915-949f-2149fe69951b
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: v2ray.simspeedup.com
+  network: ws
+  ws-opts:
+    path: /ws
+    headers:
+      Host: v2ray.simspeedup.com
+- name: 🇹🇭 TH 23 - xiaohe
   type: vmess
   server: 118.193.57.167
   port: 49667
@@ -123,22 +310,7 @@ proxies:
     path: /d46bf492
     headers:
       Host: ''
-- name: 🇹🇭 TH 10 - xiaohe
-  type: vmess
-  server: 118.193.57.167
-  port: 49667
-  uuid: d46bf492-45f4-4c33-82d1-ea2a1cb54eb6
-  alterId: 0
-  cipher: auto
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /d46bf492
-    headers:
-      Host: ''
-- name: 🇹🇭 TH 11 - xiaohe
+- name: 🇹🇭 TH 24 - xiaohe
   type: vmess
   server: 118.193.57.167
   port: 49667
@@ -169,6 +341,19 @@ proxy-groups:
   - 🇹🇭 TH 09 - xiaohe
   - 🇹🇭 TH 10 - xiaohe
   - 🇹🇭 TH 11 - xiaohe
+  - 🇹🇭 TH 12 - xiaohe
+  - 🇹🇭 TH 13 - xiaohe
+  - 🇹🇭 TH 14 - xiaohe
+  - 🇹🇭 TH 15 - xiaohe
+  - 🇹🇭 TH 16 - xiaohe
+  - 🇹🇭 TH 17 - xiaohe
+  - 🇹🇭 TH 18 - xiaohe
+  - 🇹🇭 TH 19 - xiaohe
+  - 🇹🇭 TH 20 - xiaohe
+  - 🇹🇭 TH 21 - xiaohe
+  - 🇹🇭 TH 22 - xiaohe
+  - 🇹🇭 TH 23 - xiaohe
+  - 🇹🇭 TH 24 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -185,5 +370,18 @@ proxy-groups:
   - 🇹🇭 TH 09 - xiaohe
   - 🇹🇭 TH 10 - xiaohe
   - 🇹🇭 TH 11 - xiaohe
+  - 🇹🇭 TH 12 - xiaohe
+  - 🇹🇭 TH 13 - xiaohe
+  - 🇹🇭 TH 14 - xiaohe
+  - 🇹🇭 TH 15 - xiaohe
+  - 🇹🇭 TH 16 - xiaohe
+  - 🇹🇭 TH 17 - xiaohe
+  - 🇹🇭 TH 18 - xiaohe
+  - 🇹🇭 TH 19 - xiaohe
+  - 🇹🇭 TH 20 - xiaohe
+  - 🇹🇭 TH 21 - xiaohe
+  - 🇹🇭 TH 22 - xiaohe
+  - 🇹🇭 TH 23 - xiaohe
+  - 🇹🇭 TH 24 - xiaohe
 rules:
 - MATCH,PROXIES
