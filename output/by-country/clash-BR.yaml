@@ -6,43 +6,29 @@ log-level: info
 proxies:
 - name: 🇧🇷 BR 01 - xiaohe
   type: vless
-  server: chat.openai.com
-  port: 8880
-  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
+  server: www.visa.com.hk
+  port: 443
+  uuid: ff7cb8d1-b912-46e8-9686-a209c613c614
   udp: true
-  tls: false
+  tls: true
   skip-cert-verify: true
+  servername: br-gru.xhs152.shop
   network: ws
   ws-opts:
-    path: /
+    path: /announcement?ed=2048
     headers:
-      Host: vms.lifetime29.workers.dev
-- name: 🇧🇷 BR 02 - xiaohe
-  type: vless
-  server: 72.167.230.30
-  port: 8880
-  uuid: 6202b230-417c-4d8e-b624-0f71afa9c75d
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /
-    headers:
-      Host: vms.lifetime51.workers.dev
+      Host: br-gru.xhs152.shop
 proxy-groups:
 - name: PROXIES
   type: select
   proxies:
   - AUTO
   - 🇧🇷 BR 01 - xiaohe
-  - 🇧🇷 BR 02 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
   interval: 300
   proxies:
   - 🇧🇷 BR 01 - xiaohe
-  - 🇧🇷 BR 02 - xiaohe
 rules:
 - MATCH,PROXIES

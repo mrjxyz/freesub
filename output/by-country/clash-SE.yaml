@@ -6,16 +6,18 @@ log-level: info
 proxies:
 - name: 🇸🇪 SE 01 - xiaohe
   type: vless
-  server: 34.51.231.250
+  server: freev2.cloudflare.182682.xyz
   port: 443
-  uuid: e4be912f-68e8-4d51-80a4-1342b646f8e0
+  uuid: ff7cb8d1-b912-46e8-9686-a209c613c614
   udp: true
   tls: true
   skip-cert-verify: true
-  reality-opts:
-    public-key: fV003yDr_sb_Wkgz6MxnIUJMgD15osWhzU-HZ5fLPFg
-  servername: www.cloudflare.com
-  client-fingerprint: chrome
+  servername: se-sto.xhs152.shop
+  network: ws
+  ws-opts:
+    path: /announcement?ed=2048
+    headers:
+      Host: se-sto.xhs152.shop
 - name: 🇸🇪 SE 02 - xiaohe
   type: vless
   server: 143.246.194.60
@@ -30,20 +32,6 @@ proxies:
     headers:
       Host: 143.246.194.60
 - name: 🇸🇪 SE 03 - xiaohe
-  type: vless
-  server: 84.32.217.120
-  port: 8443
-  uuid: d342d11e-d424-4583-b36e-524ab1f0afa4
-  udp: true
-  tls: true
-  skip-cert-verify: true
-  servername: cdn8848.776676.xyz
-  network: ws
-  ws-opts:
-    path: /channels/act
-    headers:
-      Host: cdn8848.776676.xyz
-- name: 🇸🇪 SE 04 - xiaohe
   type: vless
   server: 34.51.231.250
   port: 443
@@ -63,7 +51,6 @@ proxy-groups:
   - 🇸🇪 SE 01 - xiaohe
   - 🇸🇪 SE 02 - xiaohe
   - 🇸🇪 SE 03 - xiaohe
-  - 🇸🇪 SE 04 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -72,6 +59,5 @@ proxy-groups:
   - 🇸🇪 SE 01 - xiaohe
   - 🇸🇪 SE 02 - xiaohe
   - 🇸🇪 SE 03 - xiaohe
-  - 🇸🇪 SE 04 - xiaohe
 rules:
 - MATCH,PROXIES

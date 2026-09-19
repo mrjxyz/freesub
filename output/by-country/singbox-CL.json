@@ -6,22 +6,16 @@
       "tag": "select",
       "outbounds": [
         "auto",
-        "🇮🇶 IQ 01 - xiaohe",
-        "🇮🇶 IQ 02 - xiaohe",
-        "🇮🇶 IQ 03 - xiaohe",
-        "🇮🇶 IQ 04 - xiaohe",
-        "🇮🇶 IQ 05 - xiaohe"
+        "🇨🇱 CL 01 - xiaohe",
+        "🇨🇱 CL 02 - xiaohe"
       ]
     },
     {
       "type": "urltest",
       "tag": "auto",
       "outbounds": [
-        "🇮🇶 IQ 01 - xiaohe",
-        "🇮🇶 IQ 02 - xiaohe",
-        "🇮🇶 IQ 03 - xiaohe",
-        "🇮🇶 IQ 04 - xiaohe",
-        "🇮🇶 IQ 05 - xiaohe"
+        "🇨🇱 CL 01 - xiaohe",
+        "🇨🇱 CL 02 - xiaohe"
       ],
       "url": "https://www.google.com/generate_204"
     },
