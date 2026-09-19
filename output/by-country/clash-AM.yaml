@@ -6,16 +6,18 @@ log-level: info
 proxies:
 - name: 🇦🇲 AM 01 - xiaohe
   type: vless
-  server: 77.91.68.70
-  port: 55983
-  uuid: f667a096-5231-4cfb-8759-92bb32473139
+  server: 84.32.217.120
+  port: 8443
+  uuid: d342d11e-d424-4583-b36e-524ab1f0afa4
   udp: true
   tls: true
   skip-cert-verify: true
-  reality-opts:
-    public-key: nWQ7b9l9X6N3PrXLgIzOvMM8iSYrqjVHEb9ikWxqYSg
-  servername: yahoo.com
-  client-fingerprint: chrome
+  servername: cdn8848.776676.xyz
+  network: ws
+  ws-opts:
+    path: /channels/act
+    headers:
+      Host: cdn8848.776676.xyz
 - name: 🇦🇲 AM 02 - xiaohe
   type: vless
   server: 77.91.68.70
@@ -29,6 +31,32 @@ proxies:
   servername: yahoo.com
   client-fingerprint: chrome
 - name: 🇦🇲 AM 03 - xiaohe
+  type: vless
+  server: 64.227.67.161
+  port: 2083
+  uuid: d342d11e-d424-4583-b36e-524ab1f0afa4
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  servername: cdn8848.776676.xyz
+  network: ws
+  ws-opts:
+    path: /members/detail/gif?ed=2560fp=chrome
+    headers:
+      Host: cdn8848.776676.xyz
+- name: 🇦🇲 AM 04 - xiaohe
+  type: vless
+  server: 77.91.68.70
+  port: 55983
+  uuid: f667a096-5231-4cfb-8759-92bb32473139
+  udp: true
+  tls: true
+  skip-cert-verify: true
+  reality-opts:
+    public-key: nWQ7b9l9X6N3PrXLgIzOvMM8iSYrqjVHEb9ikWxqYSg
+  servername: yahoo.com
+  client-fingerprint: chrome
+- name: 🇦🇲 AM 05 - xiaohe
   type: vless
   server: 77.91.68.70
   port: 55983
@@ -48,6 +76,8 @@ proxy-groups:
   - 🇦🇲 AM 01 - xiaohe
   - 🇦🇲 AM 02 - xiaohe
   - 🇦🇲 AM 03 - xiaohe
+  - 🇦🇲 AM 04 - xiaohe
+  - 🇦🇲 AM 05 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -56,5 +86,7 @@ proxy-groups:
   - 🇦🇲 AM 01 - xiaohe
   - 🇦🇲 AM 02 - xiaohe
   - 🇦🇲 AM 03 - xiaohe
+  - 🇦🇲 AM 04 - xiaohe
+  - 🇦🇲 AM 05 - xiaohe
 rules:
 - MATCH,PROXIES

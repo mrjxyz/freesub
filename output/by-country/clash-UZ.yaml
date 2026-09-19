@@ -69,19 +69,6 @@ proxies:
     path: /73b6faea2d00
     headers:
       Host: 189.74.97.43
-- name: 🇺🇿 UZ 06 - xiaohe
-  type: vless
-  server: 189.74.97.47
-  port: 2087
-  uuid: 894fe9f0-b998-49c0-8003-a5007de921e1
-  udp: true
-  tls: false
-  skip-cert-verify: true
-  network: ws
-  ws-opts:
-    path: /755276b33b6f
-    headers:
-      Host: 189.74.97.47
 proxy-groups:
 - name: PROXIES
   type: select
@@ -92,7 +79,6 @@ proxy-groups:
   - 🇺🇿 UZ 03 - xiaohe
   - 🇺🇿 UZ 04 - xiaohe
   - 🇺🇿 UZ 05 - xiaohe
-  - 🇺🇿 UZ 06 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.google.com/generate_204
@@ -103,6 +89,5 @@ proxy-groups:
   - 🇺🇿 UZ 03 - xiaohe
   - 🇺🇿 UZ 04 - xiaohe
   - 🇺🇿 UZ 05 - xiaohe
-  - 🇺🇿 UZ 06 - xiaohe
 rules:
 - MATCH,PROXIES
