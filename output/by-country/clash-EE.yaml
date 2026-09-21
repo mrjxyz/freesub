@@ -19,8 +19,17 @@ proxies:
   type: hysteria2
   password: sOiWCQ2AdIV0OWNuqQVyWp4JZnRxdyLROSjX
   sni: cabinet.wwwinternetvideo.click
-  skip-cert-verify: false
+  skip-cert-verify: true
 - name: 🇪🇪 爱沙尼亚 (Estonia) 03 - xiaohe
+  server: 94.183.170.135
+  port: 443
+  udp: true
+  type: vless
+  uuid: 06c4e938-2954-478f-a870-ca1b163e30e9
+  network: ws
+  ws-opts:
+    path: /
+- name: 🇪🇪 爱沙尼亚 (Estonia) 04 - xiaohe
   server: 94.183.170.147
   port: 8443
   udp: true
@@ -35,25 +44,15 @@ proxies:
   network: grpc
   grpc-opts:
     grpc-service-name: 9d30d49278
-- name: 🇪🇪 爱沙尼亚 (Estonia) 04 - xiaohe
+- name: 🇪🇪 爱沙尼亚 (Estonia) 05 - xiaohe
   server: 94.183.170.135
-  port: 443
+  port: 8443
   udp: true
   type: vless
   uuid: 06c4e938-2954-478f-a870-ca1b163e30e9
-  network: ws
-  ws-opts:
-    path: /
-- name: 🇪🇪 爱沙尼亚 (Estonia) 05 - xiaohe
-  server: ee1.sferavpn.pro
-  port: 443
-  udp: true
-  type: hysteria2
-  password: cd74c0a406664a5bc0bac098220a2468
-  sni: ee1.sferavpn.pro
+  tls: true
+  servername: estproxy4.lockdwn.com
   skip-cert-verify: false
-  obfs: salamander
-  obfs-password: 44f1c1e2f8b99e792ceed574627a1eb0
 - name: 🇪🇪 爱沙尼亚 (Estonia) 06 - xiaohe
   server: 95.85.224.17
   port: 443
@@ -66,48 +65,6 @@ proxies:
     public-key: SB1uC0OEveYjSiS_Nuw9Ld-uVVXWqi794OGnldthY3I
   servername: est1313.ggisopi.su
   client-fingerprint: chrome
-- name: 🇪🇪 爱沙尼亚 (Estonia) 07 - xiaohe
-  server: 94.183.170.135
-  port: 8443
-  udp: true
-  type: vless
-  uuid: 06c4e938-2954-478f-a870-ca1b163e30e9
-  tls: true
-  servername: estproxy4.lockdwn.com
-  skip-cert-verify: false
-- name: 🇪🇪 爱沙尼亚 (Estonia) 08 - xiaohe
-  server: estomin1.vodniki.monster
-  port: 443
-  udp: true
-  type: vless
-  uuid: 4bdeee92-97e8-414d-bef6-ec1d5e2ab73b
-  flow: xtls-rprx-vision
-  tls: true
-  reality-opts:
-    public-key: r1MW0o1DsC6EEWN-KPKnoXszb1trxlKShRIgOpxqHBk
-    short-id: d98e7afec9c0c359
-  servername: estomin1.vodniki.monster
-  client-fingerprint: chrome
-- name: 🇪🇪 爱沙尼亚 (Estonia) 09 - xiaohe
-  server: tishina-axe.dedyn.io
-  port: 8443
-  udp: true
-  type: hysteria2
-  password: 319ed24b1c7203aa
-  sni: tishina-axe.dedyn.io
-  skip-cert-verify: false
-- name: 🇪🇪 爱沙尼亚 (Estonia) 10 - xiaohe
-  server: 93.89.220.7
-  port: 8443
-  udp: true
-  type: vless
-  uuid: 6eefb4c5-96c2-4b41-a8e3-3dd13e8e09d0
-  tls: true
-  reality-opts:
-    public-key: GzQr6fDhigtRAr0n2Y7Nk3snhdytYyOvaYo9zYe1Xn4
-    short-id: b3a1cc510a2001c6
-  servername: eh.vk.com
-  client-fingerprint: ios
 proxy-groups:
 - name: PROXIES
   type: select
@@ -119,10 +76,6 @@ proxy-groups:
   - 🇪🇪 爱沙尼亚 (Estonia) 04 - xiaohe
   - 🇪🇪 爱沙尼亚 (Estonia) 05 - xiaohe
   - 🇪🇪 爱沙尼亚 (Estonia) 06 - xiaohe
-  - 🇪🇪 爱沙尼亚 (Estonia) 07 - xiaohe
-  - 🇪🇪 爱沙尼亚 (Estonia) 08 - xiaohe
-  - 🇪🇪 爱沙尼亚 (Estonia) 09 - xiaohe
-  - 🇪🇪 爱沙尼亚 (Estonia) 10 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -134,9 +87,5 @@ proxy-groups:
   - 🇪🇪 爱沙尼亚 (Estonia) 04 - xiaohe
   - 🇪🇪 爱沙尼亚 (Estonia) 05 - xiaohe
   - 🇪🇪 爱沙尼亚 (Estonia) 06 - xiaohe
-  - 🇪🇪 爱沙尼亚 (Estonia) 07 - xiaohe
-  - 🇪🇪 爱沙尼亚 (Estonia) 08 - xiaohe
-  - 🇪🇪 爱沙尼亚 (Estonia) 09 - xiaohe
-  - 🇪🇪 爱沙尼亚 (Estonia) 10 - xiaohe
 rules:
 - MATCH,PROXIES
