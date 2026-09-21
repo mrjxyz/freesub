@@ -13,13 +13,13 @@ proxies:
   password: xaupMUvhptwxdDUg
 - name: 🇱🇹 立陶宛 (Lithuania) 02 - xiaohe
   server: 195.238.126.20
-  port: 9078
+  port: 9002
   udp: true
   type: ss
   cipher: aes-256-cfb
-  password: JCJpbRbQZNw9XFZG
+  password: b8KkNDjEd5QqFyRm
 - name: 🇱🇹 立陶宛 (Lithuania) 03 - xiaohe
-  server: lt.aether-runet.top
+  server: 84.32.215.5
   port: 443
   udp: true
   type: vless
@@ -30,7 +30,14 @@ proxies:
     public-key: vrcsm8L_tY7sNbnCEdLCEjOthh_w9bdWS3wFPgsIomk
     short-id: 4fa44664f6a566d3
   servername: lt.aether-runet.top
-  client-fingerprint: qq
+  client-fingerprint: chrome
+- name: 🇱🇹 立陶宛 (Lithuania) 04 - xiaohe
+  server: 195.238.126.20
+  port: 9078
+  udp: true
+  type: ss
+  cipher: aes-256-cfb
+  password: JCJpbRbQZNw9XFZG
 proxy-groups:
 - name: PROXIES
   type: select
@@ -39,6 +46,7 @@ proxy-groups:
   - 🇱🇹 立陶宛 (Lithuania) 01 - xiaohe
   - 🇱🇹 立陶宛 (Lithuania) 02 - xiaohe
   - 🇱🇹 立陶宛 (Lithuania) 03 - xiaohe
+  - 🇱🇹 立陶宛 (Lithuania) 04 - xiaohe
 - name: AUTO
   type: url-test
   url: https://www.gstatic.com/generate_204
@@ -47,5 +55,6 @@ proxy-groups:
   - 🇱🇹 立陶宛 (Lithuania) 01 - xiaohe
   - 🇱🇹 立陶宛 (Lithuania) 02 - xiaohe
   - 🇱🇹 立陶宛 (Lithuania) 03 - xiaohe
+  - 🇱🇹 立陶宛 (Lithuania) 04 - xiaohe
 rules:
 - MATCH,PROXIES
