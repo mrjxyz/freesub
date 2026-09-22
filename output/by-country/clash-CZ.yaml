@@ -5,6 +5,21 @@ mode: rule
 log-level: info
 proxies:
 - name: 🇨🇿 捷克 (Czech) 01 - xiaohe
+  server: 104.21.16.109
+  port: 443
+  udp: true
+  type: vless
+  uuid: cc08d2d0-8a7a-4469-81d2-c43704451271
+  tls: true
+  servername: 9tg-d0htbrb5e3tp0c-o7ix23cx0f.ftfgblgft6-1h2iv2oo4h0.workers.dev
+  skip-cert-verify: false
+  client-fingerprint: chrome
+  network: ws
+  ws-opts:
+    path: /vl/6871nrbnl9WsdAiOUInt
+    headers:
+      Host: 9tg-d0htbrb5e3tp0c-o7ix23cx0f.ftfgblgft6-1h2iv2oo4h0.workers.dev
+- name: 🇨🇿 捷克 (Czech) 02 - xiaohe
   server: 95.182.94.186
   port: 443
   udp: true
@@ -16,18 +31,6 @@ proxies:
     public-key: fkZTYNydTBVO-1LSiTvDcyBMx-zBP5Am780jECmUgg0
   servername: us04.mcloud.mov
   client-fingerprint: safari
-- name: 🇨🇿 捷克 (Czech) 02 - xiaohe
-  server: 95.85.230.35
-  port: 443
-  udp: true
-  type: vless
-  uuid: bbfd1f68-ec64-452f-8404-9e2bcf1df951
-  flow: xtls-rprx-vision
-  tls: true
-  reality-opts:
-    public-key: mJ-0fJDvKp0rhuyUvs1bw4RasRRM-BEOAl9iAZ8gXy0
-  servername: de.oblaco.bet
-  client-fingerprint: chrome
 proxy-groups:
 - name: PROXIES
   type: select
