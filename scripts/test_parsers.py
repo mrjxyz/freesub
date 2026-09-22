@@ -7,9 +7,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import main_v2 as mv
 
 BASEDIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SB = os.path.join(BASEDIR, "runtime", "sing-box.exe")  # 与 main_v2 运行时同一内核
-if not os.path.exists(SB):
-    SB = os.path.join(BASEDIR, ".sb-probe", "sing-box.exe")
+# 内核路径按当前平台取 (旧版硬编码 sing-box.exe, 在 Linux/macOS 上必然找不到)
+SB = mv.singbox_binary_path()
+if not os.path.exists(SB) or os.path.getsize(SB) < 1024:
+    # 缺内核就按当前平台自动补一份, 让本地与 CI 都能直接跑单测
+    mv.setup_environment()
 
 # ══════════ 测试样本 (覆盖用户全部协议) ══════════
 SAMPLES = {

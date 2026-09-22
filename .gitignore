@@ -5,4 +5,7 @@ __pycache__/
 runtime/
 .test/
 .sb-probe/
-output/e2e_test_report.json
+
+# 产物不再进 main: 全部订阅文件由 CI 摊平成单个孤儿提交推到 output 分支,
+# 本地跑完脚本留下的 output/ 也不应入库
+output/

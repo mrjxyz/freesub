@@ -73,6 +73,17 @@ OUTPUT_DIR = "output"
 COUNTRY_DIR = os.path.join(OUTPUT_DIR, "by-country")
 RESIDENTIAL_COUNTRY_DIR = os.path.join(OUTPUT_DIR, "residential-by-country")
 
+# ── 产物发布策略 ──────────────────────────────────────────────────
+# 主分支只保留代码; 全部产物每轮以「单个孤儿提交」覆盖推到 OUTPUT_BRANCH。
+# 原因: jsDelivr 对 GitHub 仓库有 50MB 上限, 而旧方案把每轮全量产物都提交进 main,
+#       仓库日均增长约 0.9MB, 约 40 天后 CDN 直链会整体失效。
+# 发布时会把 OUTPUT_DIR 下的内容摊到产物分支根目录 (README 里的链接据此生成)。
+OUTPUT_BRANCH = "output"
+# 兜底仓库名 (正常由 GITHUB_REPOSITORY 或 git remote 决定)
+DEFAULT_REPO_SLUG = "mrjxyz/freesub"
+# README 中声明的更新频率 —— 改了 .github/workflows/update.yml 的 cron 记得同步这里
+SCHEDULE_HOURS = 8
+
 SINGBOX_VERSION = "v1.14.0"
 WORKDIR = os.path.dirname(os.path.abspath(__file__))          # scripts/
 BASEDIR = os.path.dirname(WORKDIR)                              # repo root
@@ -492,17 +503,42 @@ def download_file(url: str, dest: str, timeout: int = 300, retries: int = 3):
     raise RuntimeError(f"下载最终失败 ({mirrors[0]}): {last_err}")
 
 
+def singbox_platform_tag() -> tuple:
+    """探测 sing-box 官方 release 的 (system, arch) 标识。
+
+    官方产物覆盖 linux / darwin / windows × amd64 / arm64。
+    旧版只区分 windows/linux, 在 macOS 上会去下 linux 包 —— 本地调试直接跑不起来。
+    """
+    sysname = platform.system().lower()
+    if sysname == "windows":
+        system = "windows"
+    elif sysname == "darwin":
+        system = "darwin"
+    else:
+        system = "linux"
+
+    machine = (platform.machine() or "").lower()
+    arch = "arm64" if machine in ("arm64", "aarch64") else "amd64"
+    return system, arch
+
+
+def singbox_binary_path() -> str:
+    """当前平台下 sing-box 可执行文件的预期路径。"""
+    return SINGBOX_BIN + (".exe" if os.name == "nt" else "")
+
+
 def setup_environment():
     print("[*] 准备 sing-box 内核与 GeoLite2 离线数据库 ...")
     os.makedirs(RUNTIME_DIR, exist_ok=True)
 
     # --- sing-box ---
-    exe = SINGBOX_BIN + (".exe" if os.name == "nt" else "")
+    exe = singbox_binary_path()
     if not os.path.exists(exe) or os.path.getsize(exe) < 1024:
-        system = "windows" if os.name == "nt" else "linux"
+        system, arch = singbox_platform_tag()
         ext = "zip" if system == "windows" else "tar.gz"
         url = (f"https://github.com/SagerNet/sing-box/releases/download/"
-               f"{SINGBOX_VERSION}/sing-box-{SINGBOX_VERSION.lstrip('v')}-{system}-amd64.{ext}")
+               f"{SINGBOX_VERSION}/sing-box-{SINGBOX_VERSION.lstrip('v')}-{system}-{arch}.{ext}")
+        print(f"[*] 下载 sing-box 内核: {system}-{arch}")
         archive = os.path.join(RUNTIME_DIR, f"sing-box.{ext}")
         download_file(url, archive)
         if system == "windows":
@@ -533,11 +569,31 @@ def setup_environment():
         raise
 
     # --- GeoLite2 数据库 ---
-    country_db = os.path.join(RUNTIME_DIR, "Country.mmdb")
-    asn_db = os.path.join(RUNTIME_DIR, "ASN.mmdb")
-    download_file("https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-Country.mmdb", country_db)
-    download_file("https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-ASN.mmdb", asn_db)
-    print(f"[+] GeoLite 数据库就绪: Country={os.path.getsize(country_db)//1024}KB, ASN={os.path.getsize(asn_db)//1024}KB")
+    # 旧版每一轮都无条件重下 (~20MB × 每天 4 轮), GeoLite 本身每周才更新一次。
+    # 改成: 文件存在且未过期就复用; GEOIP_MAX_AGE_HOURS 可覆盖 (默认 168h = 7 天)。
+    try:
+        max_age_h = float(os.environ.get("GEOIP_MAX_AGE_HOURS", "168"))
+    except ValueError:
+        max_age_h = 168.0
+    for label, url, path in (
+        ("Country", "https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-Country.mmdb",
+         os.path.join(RUNTIME_DIR, "Country.mmdb")),
+        ("ASN", "https://github.com/P3TERX/GeoLite.mmdb/raw/download/GeoLite2-ASN.mmdb",
+         os.path.join(RUNTIME_DIR, "ASN.mmdb")),
+    ):
+        fresh = False
+        if os.path.exists(path) and os.path.getsize(path) > 100 * 1024:
+            if max_age_h > 0:
+                age_h = (time.time() - os.path.getmtime(path)) / 3600.0
+                fresh = age_h < max_age_h
+            else:
+                fresh = True
+        if fresh:
+            print(f"[=] {label}.mmdb 复用本地缓存 (未过期)")
+        else:
+            download_file(url, path)
+    print(f"[+] GeoLite 数据库就绪: Country={os.path.getsize(os.path.join(RUNTIME_DIR, 'Country.mmdb'))//1024}KB, "
+          f"ASN={os.path.getsize(os.path.join(RUNTIME_DIR, 'ASN.mmdb'))//1024}KB")
 
 
 # ═══════════════════════════════════════════N═══════════════════════
@@ -2286,14 +2342,41 @@ def export_singbox_json(sb_nodes, filepath):
 # README 生成
 # ═══════════════════════════════════════════N═══════════════════════
 
-def update_readme(total_count, res_count):
-    repo_name = os.environ.get("GITHUB_REPOSITORY", "hezhanleiok/freesub").strip()
-    cache_bust = ""
+def detect_repo_slug() -> str:
+    """仓库 slug: 优先 GITHUB_REPOSITORY, 本地回退读 git remote, 最后用默认常量。
+
+    旧版的兜底值是别人的 fork 名 (hezhanleiok/freesub) —— 本地跑一次就会把
+    整份 README 的所有链接写向那个 fork。
+    """
+    env = (os.environ.get("GITHUB_REPOSITORY") or "").strip()
+    if env.count("/") == 1 and not env.startswith("/"):
+        return env
+    try:
+        out = subprocess.run(["git", "-C", BASEDIR, "config", "--get", "remote.origin.url"],
+                             capture_output=True, text=True, timeout=10).stdout.strip()
+        m = re.search(r"github\.com[:/]+([^/]+)/([^/]+?)(?:\.git)?/*$", out)
+        if m:
+            return f"{m.group(1)}/{m.group(2)}"
+    except Exception:
+        pass
+    return DEFAULT_REPO_SLUG
+
+
+def link_pair(repo_name: str, rel_path: str) -> str:
+    """生成 CDN + Raw 两个链接。产物统一放在 OUTPUT_BRANCH 分支根目录。"""
+    cdn = f"https://cdn.jsdelivr.net/gh/{repo_name}@{OUTPUT_BRANCH}/{rel_path}"
+    raw = f"https://raw.githubusercontent.com/{repo_name}/{OUTPUT_BRANCH}/{rel_path}"
+    return f"[CDN 直链]({cdn}) · [Raw 直链]({raw})"
+
+
+def update_readme(total_count, res_count, proto_counts=None):
+    repo_name = detect_repo_slug()
+    proto_counts = proto_counts or {}
     # 私有化部署 Worker 脚本里的仓库参数 (默认值兜底)
     try:
         owner, repo = repo_name.split("/", 1)
     except ValueError:
-        owner, repo = "hezhanleiok", "freesub"
+        owner, repo = DEFAULT_REPO_SLUG.split("/", 1)
 
     def count_file(path):
         if not os.path.exists(path):
@@ -2323,36 +2406,62 @@ def update_readme(total_count, res_count):
             flag = get_country_flag(cc)
             name = COUNTRY_NAMES.get(cc, cc)
             cnt = counts[cc]
-            v2 = f"[CDN 直链](https://cdn.jsdelivr.net/gh/{repo_name}@main/output/{sub}/{cc}.txt) · [Raw 直链](https://raw.githubusercontent.com/{repo_name}/main/output/{sub}/{cc}.txt)"
-            cl = f"[CDN 直链](https://cdn.jsdelivr.net/gh/{repo_name}@main/output/{sub}/clash-{cc}.yaml) · [Raw 直链](https://raw.githubusercontent.com/{repo_name}/main/output/{sub}/clash-{cc}.yaml)"
-            sb = f"[CDN 直链](https://cdn.jsdelivr.net/gh/{repo_name}@main/output/{sub}/singbox-{cc}.json) · [Raw 直链](https://raw.githubusercontent.com/{repo_name}/main/output/{sub}/singbox-{cc}.json)"
+            v2 = link_pair(repo_name, f"{sub}/{cc}.txt")
+            cl = link_pair(repo_name, f"{sub}/clash-{cc}.yaml")
+            sb = link_pair(repo_name, f"{sub}/singbox-{cc}.json")
             rows.append(f"| {flag} {name} | {cnt} | {v2} | {cl} | {sb} |")
         return "\n".join(rows) if rows else "| 暂无可用节点 | 0 | - | - | - |"
 
     res_table = table_rows(res_counts, "residential-by-country")
     normal_table = table_rows(normal_counts, "by-country")
 
+    # 协议行按本轮实际出库结果生成 —— 不再写死一份"支持列表"当成绩单
+    proto_label = {
+        "vless": "VLESS", "vmess": "VMESS", "trojan": "Trojan",
+        "ss": "Shadowsocks", "shadowsocks": "Shadowsocks",
+        "hysteria2": "Hysteria2", "tuic": "TUIC", "anytls": "AnyTLS", "ssh": "SSH",
+    }
+    out_total = sum(proto_counts.values())
+    if out_total:
+        listed = " · ".join(f"{proto_label.get(k, k)} {v}" for k, v in
+                           sorted(proto_counts.items(), key=lambda x: -x[1]))
+        proto_line = (f"🛡️ **本轮出库协议** (共 {out_total} 个): {listed}"
+                      f"\n> 解析层支持 VLESS (Reality/Vision) · VMESS · Trojan · Shadowsocks · Hysteria2 · TUIC · AnyTLS;"
+                      f" 上面只列本轮真正测活通过的协议 —— 没出现即本轮为 0, 不代表不支持。")
+    else:
+        proto_line = "🛡️ **协议支持**: VLESS (Reality/Vision) · VMESS · Trojan · Shadowsocks · Hysteria2 · TUIC · AnyTLS"
+
+    # 家宽专区当前只有极少量节点时给出说明, 避免"住宅 IP 甄选"的标题被误读
+    if res_count == 0:
+        res_note = "> ⚠️ 本轮家宽池为空 —— 家宽判定标准严格 (六重信号 + 欺诈分复核), 免费源里合格样本本就稀少。"
+    elif res_count < 10:
+        res_note = (f"> ℹ️ 本轮家宽池仅 {res_count} 个 —— 判定标准严格 (六重信号 + 欺诈分复核),"
+                    f" 免费源里合格样本稀少, 数量少属正常, 不代表筛选失效。")
+    else:
+        res_note = ""
+
     readme = f"""# 🚀 免费节点自动测活订阅池 (含真实家宽/住宅IP甄选)
 
 > 👤 **定制规范命名**: 所有订阅节点均重命名为 `国旗 地区 序号 (家宽) - xiaohe`
-> ⚡ **真实可用保障**: 所有节点由 `sing-box v{SINGBOX_VERSION}` 内核建立实际代理隧道, 完成真实 HTTPS 双向传输握手 + 出口 IP 穿透验证 + Cloudflare 限速下载断流检测 + TLS 证书校验 (MITM 劫持识别), 拒绝虚假通畅、断流节点与高危劫持节点。
-> 🛡️ **全协议支持**: VLESS (Reality/Vision) · VMESS · Trojan · Shadowsocks · Hysteria2 · TUIC · AnyTLS
+> ⚡ **真实可用保障**: 所有节点由 `sing-box {SINGBOX_VERSION}` 内核建立实际代理隧道, 完成真实 HTTPS 双向传输握手 + 出口 IP 穿透验证 + Cloudflare 限速下载断流检测 + TLS 证书校验 (MITM 劫持识别), 拒绝虚假通畅、断流节点与高危劫持节点。
+> {proto_line}
 
 ---
 
 ## 📌 全部节点总订阅链接
 
-| 客户端 / 格式类型 | 节点总数 | 免翻 CDN 订阅直链 (国内直连) | 官方原生 Raw 直链 (开启代理) |
-| :--- | :---: | :--- | :--- |
-| 🚀 **Clash (YAML 格式)** | `{total_count}` | [免翻 CDN 直链](https://cdn.jsdelivr.net/gh/{repo_name}@main/output/clash.yaml) | [官方 Raw 直链](https://raw.githubusercontent.com/{repo_name}/main/output/clash.yaml) |
-| ⚡ **V2RayN (Base64 格式)** | `{total_count}` | [免翻 CDN 直链](https://cdn.jsdelivr.net/gh/{repo_name}@main/output/v2ray.txt) | [官方 Raw 直链](https://raw.githubusercontent.com/{repo_name}/main/output/v2ray.txt) |
-| 📦 **sing-box (JSON 格式)** | `{total_count}` | [免翻 CDN 直链](https://cdn.jsdelivr.net/gh/{repo_name}@main/output/singbox.json) | [官方 Raw 直链](https://raw.githubusercontent.com/{repo_name}/main/output/singbox.json) |
+| 客户端 / 格式类型 | 节点总数 | 订阅直链 (CDN 免翻 / 官方 Raw) |
+| :--- | :---: | :--- |
+| 🚀 **Clash (YAML 格式)** | `{total_count}` | {link_pair(repo_name, "clash.yaml")} |
+| ⚡ **V2RayN (Base64 格式)** | `{total_count}` | {link_pair(repo_name, "v2ray.txt")} |
+| 📦 **sing-box (JSON 格式)** | `{total_count}` | {link_pair(repo_name, "singbox.json")} |
 
 ---
 
 ## 🏠 按照家宽分类节点订阅 (住宅 IP 专区)
 
 > 家宽判定六重信号: ① ip-api.com `hosting` 字段 ② `mobile` 移动网络字段 ③ Cloudflare/主流 CDN Anycast 网段比对 ④ MaxMind GeoLite2 ASN 白/黑名单 (覆盖 60+ 国家主流民用运营商) ⑤ rDNS/ISP 名称特征 ⑥ Scamalytics 风控评分复核 (fraud ≥75 降级、≥90 剔除)。排除所有云主机/数据中心/CDN 任播, 保留真实民用宽带与移动网络。
+{res_note}
 
 | 家宽地区 | 节点数 | V2RayN 专属订阅 | Clash 专属订阅 | sing-box 专属订阅 |
 | :--- | :---: | :---: | :---: | :---: |
@@ -2368,28 +2477,40 @@ def update_readme(total_count, res_count):
 
 ---
 
-## 🔒 私有仓库（Private）无感免翻订阅方案 (基于 Cloudflare Workers)
+## 🔒 私有仓库 (Private) 无感订阅方案 (基于 Cloudflare Workers)
 
 > 如果你希望将本 GitHub 仓库设置为 **Private (私有仓库)** 保护节点资产，外部客户端无法直接拉取原生 Raw 或公共 CDN 链接，可以通过以下 Cloudflare Worker 搭建轻量级私密网关反代：
 
-### 1. 获取 GitHub 永久个人令牌 (PAT)
-1. 进入 GitHub -> **Settings** -> **Developer Settings** -> **Personal access tokens (classic)**。
-2. 点击 **Generate new token (classic)**，勾选 `repo` 权限，有效期设为 `No expiration`（永不过期）。
-3. 复制保存生成的以 `ghp_` 开头的 Token。
+### 1. 生成最小权限的 GitHub 令牌
+1. 进入 GitHub → **Settings** → **Developer settings** → **Personal access tokens** → **Fine-grained tokens**。
+2. **Repository access** 只勾选这一个仓库。
+3. **Permissions** 只给 `Contents: Read-only` —— 只读就够反代用，不要给写权限。
+4. **Expiration** 设一个明确期限（如 90 天）到期换新，不要选 `No expiration`。
+   > 经典令牌 (classic) 必须整份 `repo` 权限且常被设成永不过期，一旦泄露等于交出整个账号的仓库读写权，不建议再用于此处。
 
-### 2. 部署 Cloudflare Worker
-登录 Cloudflare Dashboard，创建一个新的 Worker，复制以下脚本粘贴并部署（把 `OWNER`/`REPO`/`GITHUB_TOKEN` 改成你自己的）：
+### 2. 把令牌存成 Worker 的加密变量
+在 Worker 的 **Settings → Variables and Secrets** 里新增一个 **Secret**，名字填 `GH_TOKEN`，值填令牌。
+**不要把令牌写进 Worker 代码** —— 代码里明文粘贴，任何能看到这个 Worker 的人就拿到了它。
+
+### 3. 部署 Worker
+新建 Worker，粘贴以下脚本并部署（只需把 `OWNER`/`REPO` 改成你自己的）：
 
 ```javascript
 export default {{
-  async fetch(request) {{
-    const GITHUB_TOKEN = "ghp_你的GitHub永久访问令牌";
+  async fetch(request, env) {{
     const OWNER = "{owner}";
     const REPO = "{repo}";
-    const BRANCH = "main";
+    const BRANCH = "{OUTPUT_BRANCH}";
+    const GITHUB_TOKEN = env.GH_TOKEN;
+    if (!GITHUB_TOKEN) {{
+      return new Response("missing GH_TOKEN secret", {{ status: 500 }});
+    }}
 
     const url = new URL(request.url);
-    const filePath = "output" + url.pathname;
+    const filePath = url.pathname.slice(1);
+    if (!filePath || filePath.includes("..")) {{
+      return new Response("Bad Request", {{ status: 400 }});
+    }}
     const ghUrl = "https://raw.githubusercontent.com/" + OWNER + "/" + REPO + "/" + BRANCH + "/" + filePath;
 
     const res = await fetch(ghUrl, {{
@@ -2406,21 +2527,25 @@ export default {{
     return new Response(await res.text(), {{
       headers: {{
         "Content-Type": "text/plain; charset=utf-8",
-        "Cache-Control": "no-cache"
+        "Cache-Control": "no-store"
       }}
     }});
   }}
 }}
 ```
 
-### 3. 私有订阅链接映射方式
-部署后 Worker 会分配一个专属域名（例如 `my-sub.yourname.workers.dev`），你的客户端可以直接无感订阅：
+### 4. 私有订阅链接映射方式
+部署后 Worker 会分配一个专属域名（例如 `my-sub.yourname.workers.dev`），客户端可直接无感订阅。
+路径与产物分支的目录结构一致，**不要加 `output/` 前缀**：
+
 * **总 V2RayN 订阅**: `https://你的域名.workers.dev/v2ray.txt`
 * **总 Clash 订阅**: `https://你的域名.workers.dev/clash.yaml`
 * **总 sing-box 订阅**: `https://你的域名.workers.dev/singbox.json`
-* **台湾家宽 V2RayN**: `https://你的域名.workers.dev/residential-by-country/TW.txt`
-* **香港家宽 Clash**: `https://你的域名.workers.dev/residential-by-country/clash-HK.yaml`
-* **日本家宽 sing-box**: `https://你的域名.workers.dev/residential-by-country/singbox-JP.json`
+* **按国家（例：日本 V2RayN）**: `https://你的域名.workers.dev/by-country/JP.txt`
+* **按国家（例：美国 Clash）**: `https://你的域名.workers.dev/by-country/clash-US.yaml`
+* **家宽专区（例：中国台湾 sing-box）**: `https://你的域名.workers.dev/residential-by-country/singbox-TW.json`
+
+> 家宽专区只收录通过六重信号判定的样本，目录里有什么国家就只能订阅什么国家（见上方家宽表格）。
 
 ---
 
@@ -2431,13 +2556,48 @@ export default {{
 ---
 
 ## 🛠️ 项目使用说明
-1. **自动更新机制**：GitHub Actions 每 6 小时全自动运行并刷新上述全部订阅与数据。
+1. **自动更新机制**：GitHub Actions 每 {SCHEDULE_HOURS} 小时全自动运行并刷新上述全部订阅与数据。
 2. **测活标准**：节点必须通过 ① 端口预检 ② sing-box 实际隧道 3 个 generate_204 探测 ③ 真实出口 IP 穿透获取 ④ Cloudflare 5MB 限时下载 (吞吐 ≥ 70KB/s) ⑤ TLS 证书校验非 MITM, 方可入库。
 3. **多客户端兼容**：Clash / v2rayN / sing-box 全格式订阅。
+4. **产物与代码分离**：本 README 与 `scripts/` 在 `main` 分支；全部订阅产物在 `{OUTPUT_BRANCH}` 分支（每轮以单个提交整体覆盖），上述链接均指向该分支。
+5. **本地调试**（不必烧 CI）：`MAX_NODES=50 DRY_RUN=1 python scripts/main_v2.py` 只跑 50 个候选且不写产物；另有 `SKIP_CHAIN=1`、`PROBE_WORKERS=<n>`；解析层单测为 `python scripts/test_parsers.py`。
 """
     with open(os.path.join(BASEDIR, "README.md"), "w", encoding="utf-8") as f:
         f.write(readme)
     print(f"[+] README.md 更新完毕: 总节点 {total_count}, 家宽 {res_count}")
+
+
+# ═══════════════════════════════════════════N═══════════════════════
+# 本地调试开关
+# ═══════════════════════════════════════════N═══════════════════════
+
+def apply_env_overrides():
+    """本地调试用的可选开关, 不设置时行为与线上完全一致 (CI 不受影响)。
+
+      MAX_NODES=<n>        只处理前 n 个去重候选 — 验证一处改动不必跑满全量
+      PROBE_WORKERS=<n>    覆盖测活并发 (默认 48)
+      SKIP_CHAIN=1         跳过家宽链式复测 (整轮里最耗时的一段)
+      DRY_RUN=1            测完即停, 不写 output/ 也不改 README
+      GEOIP_MAX_AGE_HOURS  mmdb 有效期 (小时, 默认 168; 0 = 永不重下)
+    """
+    global MAX_WORKERS_TEST
+
+    try:
+        workers = int(os.environ.get("PROBE_WORKERS", "") or 0)
+    except ValueError:
+        workers = 0
+    if workers > 0:
+        MAX_WORKERS_TEST = workers
+
+    def flag(name):
+        return (os.environ.get(name, "") or "").strip().lower() in ("1", "true", "yes", "on")
+
+    return {
+        "max_nodes": int(os.environ.get("MAX_NODES", "") or 0) or None,
+        "skip_chain": flag("SKIP_CHAIN"),
+        "dry_run": flag("DRY_RUN"),
+        "workers": MAX_WORKERS_TEST,
+    }
 
 
 # ═══════════════════════════════════════════N═══════════════════════
@@ -2447,6 +2607,9 @@ export default {{
 def main():
     t_start = time.time()
     print(f"==== 免费节点测活订阅池 v2 · 启动于 {datetime.now(timezone.utc).isoformat()} ====")
+    opts = apply_env_overrides()
+    if any((opts["max_nodes"], opts["skip_chain"], opts["dry_run"], os.environ.get("PROBE_WORKERS"))):
+        print(f"[*] 调试开关生效: {opts}")
     ensure_directories()
     setup_environment()
 
@@ -2508,6 +2671,11 @@ def main():
     DEDUP_MAP = seen_keys  # 供测活后回填 (全局)
     candidates = deduped
 
+    # 调试: 只跑前 N 个候选, 用来验证改动而不必烧满整轮
+    if opts["max_nodes"] and len(candidates) > opts["max_nodes"]:
+        print(f"[*] MAX_NODES={opts['max_nodes']} → 仅取前 {opts['max_nodes']} 个候选 ({len(candidates)} 个已截断)")
+        candidates = candidates[:opts["max_nodes"]]
+
     proto_stat = {}
     for _, _, _, _, p in candidates:
         proto_stat[p] = proto_stat.get(p, 0) + 1
@@ -2551,7 +2719,10 @@ def main():
 
     # 5. ★ 家宽链式复测: 用最快存活节点做前置双跳复测家宽候选
     #    (模拟用户 v2rayN 链式场景, 双跳失败的家宽降级普通区 — 提高链式可用率)
-    test_results = chain_retest(test_results)
+    if opts["skip_chain"]:
+        print("[*] SKIP_CHAIN=1 → 跳过家宽链式复测")
+    else:
+        test_results = chain_retest(test_results)
 
     # 6. 分类 + 导出 (无真活节点时保留上次 output, 不写空订阅覆盖线上数据)
     if not test_results:
@@ -2561,8 +2732,16 @@ def main():
     if not unique_nodes:
         print("[!] 分类后无存活节点 — 保留上次 output")
         return
-    total, res = export_all(unique_nodes, residential, non_residential)
-    update_readme(total, res)
+    by_proto = {}
+    for n in unique_nodes:
+        by_proto[n["proto"]] = by_proto.get(n["proto"], 0) + 1
+
+    if opts["dry_run"]:
+        print("[*] DRY_RUN=1 → 不写 output/ 也不更新 README")
+        total, res = len(unique_nodes), len(residential)
+    else:
+        total, res = export_all(unique_nodes, residential, non_residential)
+        update_readme(total, res, by_proto)
 
 
     # 统计报告
@@ -2573,9 +2752,6 @@ def main():
     for n in unique_nodes:
         by_type[n["net_type"]] = by_type.get(n["net_type"], 0) + 1
     print(f"节点类型分布: {by_type}")
-    by_proto = {}
-    for n in unique_nodes:
-        by_proto[n["proto"]] = by_proto.get(n["proto"], 0) + 1
     print(f"协议分布(出库): {by_proto}")
     by_country = {}
     for n in unique_nodes:

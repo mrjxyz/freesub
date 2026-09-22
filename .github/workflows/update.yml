@@ -2,20 +2,40 @@ name: Update Subscriptions
 
 on:
   schedule:
-    # 每天在 UTC 时间 0:00, 6:00, 12:00, 18:00 自动触发更新
-    - cron: '0 */6 * * *'
+    # 每天 3 轮 (UTC 0/8/16 = 北京时间 8/16/0 点), 旧版 4 轮对 2900+ 陌生节点
+    # 高频主动握手的流量模式容易被 GitHub 出口风控标记, 降频后单轮产出足够日常订阅
+    - cron: '0 */8 * * *'
   workflow_dispatch: # 支持手动点击运行
+
+# 同一时刻只允许一轮在跑, 避免重叠时互相覆盖产物
+concurrency:
+  group: update-subscriptions
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 50
+    timeout-minutes: 30
     permissions:
       contents: write
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      # sing-box 内核 + GeoLite mmdb 跨轮缓存:
+      # mmdb 本身每周才更新, 旧版每轮无条件重下 ~20MB 纯属浪费;
+      # key 按自然周滚动, 一周刷新一次缓存
+      - name: Compute cache week
+        id: wk
+        run: echo "week=$(date -u +%G-W%V)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache runtime (sing-box kernel + GeoLite mmdb)
+        uses: actions/cache@v4
+        with:
+          path: runtime
+          key: runtime-${{ runner.os }}-${{ steps.wk.outputs.week }}
+          restore-keys: runtime-${{ runner.os }}-
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -25,12 +45,14 @@ jobs:
           cache-dependency-path: scripts/requirements.txt
 
       - name: Install Dependencies
-        run: |
-          pip install -r scripts/requirements.txt
+        run: pip install -r scripts/requirements.txt
+
+      # 解析/分类层单测前置: 挂了直接红, 不再烧 25 分钟测活后才发现
+      - name: Unit tests (parsers & classifiers)
+        run: python scripts/test_parsers.py
 
       - name: Run Real-Prober and Classifier (sing-box v1.14 全协议)
-        run: |
-          python scripts/main_v2.py
+        run: python scripts/main_v2.py
         env:
           # 便于 ip-api 等识别限速; GitHub runner 出口为美国 Azure
           PYTHONUNBUFFERED: '1'
@@ -40,33 +62,51 @@ jobs:
         if: always()
         with:
           name: run-report
-          path: |
-            output/e2e_test_report.json
+          path: output/e2e_test_report.json
           retention-days: 7
           if-no-files-found: ignore
 
-      - name: Commit and Push Results
+      # 产物发布策略: output/ 不进 main —— 全部订阅文件摊平为「单个孤儿提交」
+      # force-push 到 output 分支。main 历史停止增长, jsDelivr 的 50MB 仓库上限
+      # 永远撞不到 (旧方案日均 +0.9MB, 约 40 天后 CDN 直链整体失效)。
+      - name: Publish outputs to `output` branch (single orphan commit)
+        if: success() && hashFiles('output/v2ray.txt') != ''
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A output/ README.md
+          set -e
+          cd output
+          git init -q -b output
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "subscription snapshot: $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${GITHUB_REPOSITORY}.git"
+          git push -q --force origin output:output
+          echo "[+] output branch force-pushed (single commit)"
+
+      # README 仍走 main (代码分支), 仅在内容有变化时提交
+      - name: Commit README to main
+        if: success() && hashFiles('output/v2ray.txt') != ''
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
           if git diff --staged --quiet; then
-            echo "没有节点变动与内容更新。"
+            echo "README 无变化。"
           else
-            git commit -m "Auto Update: $(date -u '+%Y-%m-%d %H:%M:%S') UTC"
-            git push
+            git commit -m "docs: refresh README ($(date -u '+%Y-%m-%d %H:%M UTC'))"
+            git pull --rebase --autostash origin "${GITHUB_REF_NAME:-main}"
+            git push origin "HEAD:${GITHUB_REF_NAME:-main}"
           fi
 
+      # jsDelivr purge: 链接全部指向 @output 分支; 并行发起, 不再逐个 sleep
       - name: Purge jsDelivr CDN (post-push)
-        if: success()
+        if: success() && hashFiles('output/v2ray.txt') != ''
         run: |
           REPO="${GITHUB_REPOSITORY}"
-          p() { curl -s -o /dev/null "https://purge.jsdelivr.net/gh/${REPO}@main/$1" || true; }
-          p README.md
-          for f in v2ray.txt clash.yaml singbox.json residential.txt residential-clash.yaml residential-singbox.json; do
-            p "output/$f"
-          done
-          find output/residential-by-country output/by-country -type f 2>/dev/null | while read -r f; do
-            p "$f"; sleep 0.2
-          done
-          echo "[+] jsDelivr CDN purge done (after push)"
+          cd output
+          find . -type f ! -name 'e2e_test_report.json' -printf '%P\n' > /tmp/files.txt
+          cat /tmp/files.txt | xargs -P 12 -I{} \
+            curl -s -o /dev/null --max-time 15 "https://purge.jsdelivr.net/gh/${REPO}@output/{}" || true
+          # README 在 main 分支, 单独 purge
+          curl -s -o /dev/null --max-time 15 "https://purge.jsdelivr.net/gh/${REPO}@main/README.md" || true
+          echo "[+] jsDelivr purge done ($(wc -l < /tmp/files.txt) files + README)"

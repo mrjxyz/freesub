@@ -92,3 +92,31 @@
 | 13 | 家宽总量偏少（8 个） | ① 旧版 4 协议引擎时代 hy2/tuic 家宽全灭 ② 严判据（Scamalytics ≥75 降级 + fraud ≥90 剔除 + ipapi.is 否决）宁缺毋滥，免费池里真家宽本来就稀缺 | 属**预期行为**：真家宽在免费节点池是稀缺资源；本次修复误判（#11）后，假家宽不再挤占真家宽名额 |
 
 > 关键结论：**免费节点池里"家宽"大多数是伪装的**（机房收购家宽 IP 段、rDNS 带.dsl/.pppoe 关键词、ip-api proxy 标志）。本版用四道闸门过滤：ip-api hosting/proxy 字段 → ASN 黑白名单 → ipapi.is 交叉源 → Scamalytics 欺诈分。
+
+## 八、工程与合规修复 (2026-09-22)
+
+> 起因：`output/` 全量入库导致仓库持续膨胀（16 天 +14.7MB，日均约 0.9MB），
+> 而 jsDelivr 对 GitHub 仓库有 **50MB 硬上限**（超限后该仓库的 CDN 直链整体失效）。
+> 按当时增速约 40 天即撞线 —— 而"免翻 CDN 直链"正是本项目的核心卖点。
+
+| # | 问题 | 影响 | 修复 |
+|---|---|---|---|
+| 14 | 每轮全量产物提交进 `main`，仓库单调增长 | 约 40 天后 jsDelivr 直链全部失效（50MB 上限） | 产物改推**独立 `output` 分支**：每轮 `git init` 出**单个孤儿提交** + `--force` 覆盖，`main` 历史停止增长，仓库体积恒定。`output/` 加入 `.gitignore`，README 全部链接指向 `@output` |
+| 15 | CI 每天 4 轮，每轮对 2900+ 陌生节点主动握手 + 限时下载 | 高频境外扫描式流量，易被出口风控标记（代价是账号级） | 降为**每天 3 轮**（`0 */8`），job `timeout` 50 → 30 分钟，并加 `concurrency` 防止轮次重叠互相覆盖产物 |
+| 16 | `test_parsers.py` 写好了但没接进 CI | 解析层挂了要烧 25 分钟测活后才发现 | 单测**前置**到测活之前执行；测试脚本改用当前平台的内核路径，缺内核时自动补，本地与 CI 都能直接跑 |
+| 17 | 内核下载只区分 windows/linux | macOS 上会去下 linux 包，本地根本跑不起来 | 按 `platform.system()` + `machine()` 选 `linux/darwin/windows × amd64/arm64` |
+| 18 | GeoLite mmdb 每轮无条件重下（约 20MB × 4 轮/天） | 纯浪费带宽（GeoLite 本身每周才更新） | 本地改按**时效复用**（`GEOIP_MAX_AGE_HOURS`，默认 168h）；CI 侧加 `runtime/` **按自然周滚动缓存** |
+| 19 | README 写死 7 协议"全支持"、把别人的 fork 名当兜底仓库名、Worker 示例教人用永不过期的 classic PAT 且把 Token 明文写进代码 | 协议虚报（TUIC/AnyTLS 实际为 0）、本地跑一次就把链接写向别人的仓库、安全建议有害 | 协议行改为**按本轮实际出库统计**生成；仓库名改为 `GITHUB_REPOSITORY` → `git remote` → 常量三级回退；Worker 改用 **fine-grained 只读令牌 + 有期限 + 存为 Secret**，并做路径穿越校验 |
+| 20 | 家宽专区标题写着"住宅 IP 甄选"，但表里只有 1 个节点且无任何说明 | 容易被读成"筛选失效"或夸大宣传 | 家宽数量少时**自动加一行说明**（判定严格、免费源里真家宽本就稀缺）；家宽与普通区表格彻底分开，不再互相指向 |
+
+**CI 步骤（现行）**：缓存运行时 → 装依赖 → **单测** → 测活 → 产物推 `output` 分支（单个孤儿提交）→ README 提交 `main` → 并行 purge jsDelivr。
+
+**新增本地调试开关**（不设置时线上行为完全不变）：
+
+```bash
+MAX_NODES=50 DRY_RUN=1 python scripts/main_v2.py   # 只测前 50 个候选、不写产物
+SKIP_CHAIN=1 ...      # 跳过家宽链式复测（整轮最耗时的一段）
+PROBE_WORKERS=<n> ... # 覆盖测活并发（默认 48）
+GEOIP_MAX_AGE_HOURS=0 ... # mmdb 永不重下
+```
+
