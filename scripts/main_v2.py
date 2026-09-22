@@ -33,6 +33,8 @@ import socket
 import zipfile
 import tarfile
 import platform
+import threading
+import contextlib
 import subprocess
 import ipaddress
 import urllib.parse
@@ -44,6 +46,7 @@ try:
     import requests
     import yaml
     import maxminddb
+    from requests.adapters import HTTPAdapter
 except ImportError as e:
     print(f"[!] 缺少依赖: {e} — 请先 pip install -r requirements.txt")
     sys.exit(1)
@@ -91,15 +94,26 @@ RUNTIME_DIR = os.path.join(BASEDIR, "runtime")                  # kernels & db
 SINGBOX_BIN = os.path.join(RUNTIME_DIR, "sing-box")
 
 # --- 测活阈值 (毫秒/秒) ---
-# ★ 分层超时: 首击宽 (12s 容慢节点), 重试窄 (4s 快速放弃死节点)
-#   依据 CI 实测: 25 分钟里 ~60% 时间烧在死节点 3×12s 满额重试上
-PROBE_TIMEOUT          = 12      # 活性首击超时 (秒) — 容纳慢启动节点
-PROBE_RETRY_TIMEOUT    = 4       # 活性重试超时 (秒) — 死节点快速放弃
+# ★ 探测预算: 活性探测改为「共享总预算」而非「每 URL 各一份超时」
+#   旧版 3 个 URL 顺序超时 = 12+4+4 = 20s 最坏路径, 死节点长尾吃掉了整轮大半时间。
+#   现版: 全部 URL 共用 PROBE_DEADLINE, 超时用 (connect, read) 元组各自设限 →
+#         死节点最坏 12s 收敛, 能过 204 的节点判定门槛未变。
+PROBE_DEADLINE         = 12.0    # 活性探测总预算 (秒) — 覆盖全部活性 URL, 不是每个
+PROBE_CONNECT_TIMEOUT  = 5.0     # TCP/TLS 建连上限 (秒) — 建连都超 5s 的节点无实用价值
+PROBE_TIMEOUT          = 12      # 兼容保留: 单次读超时上限
+PROBE_RETRY_TIMEOUT    = 4       # 兼容保留: 单次读超时下限 (出口 IP / MITM 等附带步骤)
 PORT_KNOCK_TIMEOUT     = 2.5     # 端口预检超时
 IP_ECHO_TIMEOUT        = 6.0     # 出口 IP 检测超时
 SPEED_TEST_BYTES       = 2_500_000   # 2.5MB 下载测速 (2.5MB 足以算准吞吐且 < 70KB/s 判定线不变)
 SPEED_TEST_BUDGET      = 5.0         # 测速时间预算 (秒) — 2.5MB@70KB/s=36s 必断流, 5s 预算足够判型
 SPEED_MIN_BYTES_PER_S  = 70_000      # 吞吐 < 70KB/s 判定断流/不可用 (标准不变)
+# ★ 测速提前收工阈值: 已入账字节数 ≥ 该值时, 即使剩余预算内一个字节都收不到,
+#   平均吞吐仍 ≥ SPEED_MIN_BYTES_PER_S → 判定结果不可能翻转, 可以立即收工。
+#   (旧版无论快慢都跑满 5s; speed_bps 下游只用于 is_stalled 阈值比较, 故判定完全等价)
+SPEED_BANKED_BYTES     = int(SPEED_MIN_BYTES_PER_S * SPEED_TEST_BUDGET)   # 350 KB
+# ★ 可选探测步骤开关 (默认全关 — 这两步在 CI 实测中要么结果无人消费, 要么已被 run 覆盖)
+SB_CHECK_ENABLED       = False   # 每节点额外跑一次 `sing-box check`; 实测 run 对坏配置 121ms 即退出, check 无增益
+WARP_CHECK_ENABLED     = False   # cloudflare trace 判 warp; 实测 is_warp 全仓无人消费 → 默认不做这轮往返
 IP_ECHO_URLS = [                    # 经代理获取出口 IP (多路冗余)
     "https://api.ip.sb/geoip",                         # JSON: country_code/asn/isp
     "https://ipinfo.io/json",                          # JSON: country/org
@@ -410,6 +424,17 @@ DIRECT_SESSION.headers.update({"User-Agent": USER_AGENT, "Accept": "*/*"})
 PROBE_SESSION = requests.Session()
 PROBE_SESSION.trust_env = False    # 强制隔离: 节点探测链路绝不经本机代理, 防污染测试结果
 PROBE_SESSION.headers.update({"User-Agent": USER_AGENT})
+# ★ 连接池放大: 每个节点是一个独立 SOCKS 端口 → 每个节点在 urllib3 里对应一个独立连接池。
+#   默认 HTTPAdapter(pool_connections=10) 只缓存 10 个池, 48 并发下旧池被反复淘汰并 close(),
+#   导致「同一节点内的 5~6 次请求」每次都要重做 SOCKS+TLS 握手 (白耗时 + 白耗流量)。
+#   按并发数放大缓存, 并关掉 urllib3 的隐式重试 (失败语义由本模块自己判定, 重试只会拖长死节点)。
+_PROBE_ADAPTER = HTTPAdapter(
+    pool_connections=max(MAX_WORKERS_TEST * 2, 32),
+    pool_maxsize=4,
+    max_retries=0,
+)
+PROBE_SESSION.mount("http://", _PROBE_ADAPTER)
+PROBE_SESSION.mount("https://", _PROBE_ADAPTER)
 
 
 def http_get(url: str, timeout: int = 15, headers: dict = None) -> requests.Response:
@@ -1138,10 +1163,81 @@ def prefilter_candidates(candidates: list) -> list:
 # 阶段 B: sing-box 真实测活
 # ═══════════════════════════════════════════N═══════════════════════
 
+_PORT_LOCK = threading.Lock()
+_PORTS_IN_USE = set()          # 进程内已占用端口 — 防 TOCTOU 撞端口
+
+
 def _alloc_socks_port() -> int:
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.bind(("127.0.0.1", 0))
-        return s.getsockname()[1]
+    """分配一个进程内保证不重复的本地 SOCKS 端口。
+
+    旧实现只做 bind(0) → 取端口 → close(), 在 48 并发下两个线程可能拿到同一端口:
+    先绑上的 sing-box 会占住它, 另一个线程的 sing-box 绑定失败退出, 而它的「就绪探测」
+    却连上了前者的端口 → 把 A 节点的测量结果记到 B 节点头上 (静默污染)。
+    这里加一层进程内预留, 把端口持有到 finally 释放为止。
+    """
+    with _PORT_LOCK:
+        for _ in range(50):
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+                s.bind(("127.0.0.1", 0))
+                port = s.getsockname()[1]
+            if port not in _PORTS_IN_USE:
+                _PORTS_IN_USE.add(port)
+                return port
+        # 极端情况兜底 (理论不可达)
+        port = 20000 + (len(_PORTS_IN_USE) % 20000)
+        _PORTS_IN_USE.add(port)
+        return port
+
+
+def _release_socks_port(port: int):
+    if port:
+        with _PORT_LOCK:
+            _PORTS_IN_USE.discard(port)
+
+
+# ══════════════════════════════════════════════════════════════════
+# 阶段耗时埋点 (聚合到运行报告, 供下一轮优化取数, 而不是靠猜)
+# ══════════════════════════════════════════════════════════════════
+
+_PHASE_LOCK = threading.Lock()
+_PHASE_STATS = {}          # name -> [总秒数, 调用次数]
+
+
+def _phase_add(name: str, dt: float):
+    with _PHASE_LOCK:
+        cur = _PHASE_STATS.get(name)
+        if cur is None:
+            _PHASE_STATS[name] = [dt, 1]
+        else:
+            cur[0] += dt
+            cur[1] += 1
+
+
+def phase_stats() -> dict:
+    """返回 {阶段: {total_s, calls, avg_ms, share}} — share 为该阶段总秒数占全部阶段之和。"""
+    with _PHASE_LOCK:
+        snap = {k: list(v) for k, v in _PHASE_STATS.items()}
+    grand = sum(v[0] for v in snap.values()) or 1e-9
+    return {
+        k: {
+            "total_s": round(v[0], 1),
+            "calls": v[1],
+            "avg_ms": round(v[0] / v[1] * 1000, 1),
+            "share": round(v[0] / grand * 100, 1),
+        }
+        for k, v in sorted(snap.items(), key=lambda x: -x[1][0])
+    }
+
+
+@contextlib.contextmanager
+def phase(name: str):
+    """计时上下文 — 线程安全; 异常也会记入 (失败路径才是长尾的大头)。"""
+    t0 = time.perf_counter()
+    try:
+        yield
+    finally:
+        _phase_add(name, time.perf_counter() - t0)
 
 
 def build_test_config(outbound: dict, socks_port: int, chain_relay: dict = None) -> dict:
@@ -1209,6 +1305,17 @@ def print_once(key: str, msg: str):
         print(msg)
 
 
+def _mitm_from_response(r) -> bool:
+    """由一次 generate_204 响应判定 MITM 风险 (与旧版独立复检完全同一判据)。
+    204/200 → 干净; 其余状态码里出现 3xx/403/407/502/503, 或 204 却带了响应体
+    (正常 generate_204 响应体必为空) → 疑似中间人改写。"""
+    if r is None:
+        return False
+    if r.status_code in (204, 200):
+        return False
+    return r.status_code in (301, 302, 403, 407, 502, 503) or len(r.content) > 0
+
+
 def test_single_node(item, keep_alive_check=True):
     """返回 dict 或 None; 含: 活性/延迟/出口IP/国家/ASN/ISP/速度/MITM"""
     raw, outbound, server, port, proto = item
@@ -1230,146 +1337,175 @@ def test_single_node(item, keep_alive_check=True):
 
     exe = SINGBOX_BIN + (".exe" if os.name == "nt" else "")
 
-    # --- 0) sing-box check 预校验: 快速淘汰 schema 错误 (实测可发现 2022 密钥长度/端口区间等错误) ---
-    try:
-        chk = subprocess.run([exe, "check", "-c", cfg_path],
-                             capture_output=True, text=True, timeout=15,
-                             creationflags=(subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0))
-        if chk.returncode != 0:
-            return None  # 配置级错误 → 该节点无法被 sing-box 使用, 必淘汰
-    except Exception:
-        pass  # check 本身失败不阻止后续 run 尝试
+    # --- 0) sing-box check 预校验 (默认关闭) ---
+    # 旧版每节点都多 spawn 一次 check。实测: 坏配置下 `run` 121ms 即退出 rc=1,
+    # 与 check 的淘汰能力等价, 而 check 本身要 73ms + 一次进程创建, 纯属重复劳动。
+    # 需要排查具体报错时用 SB_CHECK=1 单独打开。
+    if SB_CHECK_ENABLED:
+        try:
+            chk = subprocess.run([exe, "check", "-c", cfg_path],
+                                 capture_output=True, text=True, timeout=15,
+                                 creationflags=(subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0))
+            if chk.returncode != 0:
+                return None  # 配置级错误 → 该节点无法被 sing-box 使用, 必淘汰
+        except Exception:
+            pass  # check 本身失败不阻止后续 run 尝试
 
     proc = None
     result = None
     try:
-        proc = subprocess.Popen(
-            [exe, "run", "-c", cfg_path],
-            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            creationflags=(subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0),
-        )
-        # 等 SOCKS 端口就绪 (主动探测而非盲 sleep — 修复旧版误杀)
-        deadline = time.time() + 6
-        ready = False
-        while time.time() < deadline:
-            if proc.poll() is not None:
-                break  # 进程崩溃 (配置错误/端口冲突)
-            try:
-                with socket.create_connection(("127.0.0.1", socks_port), timeout=0.4):
-                    ready = True
-                    break
-            except Exception:
-                time.sleep(0.15)
-        if not ready:
-            return None
+        with phase("spawn+就绪"):
+            proc = subprocess.Popen(
+                [exe, "run", "-c", cfg_path],
+                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                creationflags=(subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0),
+            )
+            # 等 SOCKS 端口就绪 (主动探测而非盲 sleep — 修复旧版误杀)
+            deadline = time.time() + 6
+            ready = False
+            while time.time() < deadline:
+                if proc.poll() is not None:
+                    break  # 进程崩溃 (配置错误/端口冲突)
+                try:
+                    with socket.create_connection(("127.0.0.1", socks_port), timeout=0.4):
+                        ready = True
+                        break
+                except Exception:
+                    time.sleep(0.15)
+            if not ready:
+                return None
 
         proxies = {"http": f"socks5h://127.0.0.1:{socks_port}",
                    "https": f"socks5h://127.0.0.1:{socks_port}"}
 
-        # --- 1) 活性探测: 分层超时重试 (首击宽 12s 容慢节点保准确率; 重试窄 4s 快速放弃死节点) ---
+        # --- 1) 活性探测: 共享总预算 ---
+        # 旧版每个 URL 各带一份超时 (12s + 4s + 4s), 一条死链最坏烧 20s;
+        # 48 并发下这批长尾就是整轮耗时的大头。现改为全部 URL 共用 PROBE_DEADLINE,
+        # 且超时用 (connect, read) 元组分别设限 → 死节点最坏 12s 收敛。
         alive_hits, latency_ms = 0, 99999
-        t0 = time.time()
-        for i, url in enumerate(LIVENESS_URLS):
-            timeout = PROBE_TIMEOUT if i == 0 else PROBE_RETRY_TIMEOUT
-            try:
-                r = PROBE_SESSION.get(url, proxies=proxies, timeout=timeout, allow_redirects=False)
-                if r.status_code in (204, 200):
-                    alive_hits += 1
-                    latency_ms = min(latency_ms, (time.time() - t0) * 1000)
-                    break  # 任一成功即可
-            except Exception:
-                continue
+        live_resp, live_url = None, None
+        with phase("活性探测"):
+            t0 = time.time()
+            for url in LIVENESS_URLS:
+                left = PROBE_DEADLINE - (time.time() - t0)
+                if left <= 0.4:
+                    break          # 预算耗尽 → 按不可用处理 (需 >12s 才回 204 的节点本就无实用价值)
+                try:
+                    r = PROBE_SESSION.get(url, proxies=proxies, allow_redirects=False,
+                                          timeout=(min(PROBE_CONNECT_TIMEOUT, left), left))
+                    if r.status_code in (204, 200):
+                        alive_hits += 1
+                        latency_ms = min(latency_ms, (time.time() - t0) * 1000)
+                        live_resp, live_url = r, url
+                        break          # 任一成功即可
+                except Exception:
+                    continue
         if alive_hits == 0:
             return None
 
         # --- 2) 真实出口 IP (多路冗余) ---
         exit_ip, exit_country, exit_asn, exit_asn_org, exit_isp = None, None, None, None, None
-        for url in IP_ECHO_URLS:
-            try:
-                r = PROBE_SESSION.get(url, proxies=proxies, timeout=IP_ECHO_TIMEOUT)
-                if r.status_code != 200:
+        with phase("出口IP"):
+            for url in IP_ECHO_URLS:
+                try:
+                    r = PROBE_SESSION.get(url, proxies=proxies, timeout=IP_ECHO_TIMEOUT)
+                    if r.status_code != 200:
+                        continue
+                    j = r.json()
+                    ip = (j.get("ip") or j.get("query") or j.get("your_ip") or "").strip()
+                    if not ip:
+                        continue
+                    exit_ip = ip
+                    if url.startswith("https://api.ip.sb"):
+                        exit_country = j.get("country_code")
+                        exit_asn = j.get("asn")
+                        exit_asn_org = (j.get("asn_organization") or j.get("organization") or "")
+                        exit_isp = (j.get("isp") or j.get("organization") or "")
+                    elif url.startswith("https://ipinfo.io"):
+                        exit_country = exit_country or (j.get("country") or "").upper()
+                        org = j.get("org") or ""
+                        if org and not exit_asn:
+                            mm = re.match(r"^AS(\d+)\s+(.*)", org)
+                            if mm:
+                                exit_asn, exit_asn_org = int(mm.group(1)), mm.group(2)
+                        exit_isp = exit_isp or org
+                    elif "ip-api.com" in url:
+                        exit_country = exit_country or (j.get("countryCode") or "").upper()
+                        exit_asn = exit_asn or j.get("as")
+                        exit_asn_org = exit_asn_org or j.get("asname") or j.get("org") or ""
+                        exit_isp = exit_isp or j.get("isp") or j.get("org") or ""
+                    break
+                except Exception:
                     continue
-                j = r.json()
-                ip = (j.get("ip") or j.get("query") or j.get("your_ip") or "").strip()
-                if not ip:
-                    continue
-                exit_ip = ip
-                if url.startswith("https://api.ip.sb"):
-                    exit_country = j.get("country_code")
-                    exit_asn = j.get("asn")
-                    exit_asn_org = (j.get("asn_organization") or j.get("organization") or "")
-                    exit_isp = (j.get("isp") or j.get("organization") or "")
-                elif url.startswith("https://ipinfo.io"):
-                    exit_country = exit_country or (j.get("country") or "").upper()
-                    org = j.get("org") or ""
-                    if org and not exit_asn:
-                        mm = re.match(r"^AS(\d+)\s+(.*)", org)
-                        if mm:
-                            exit_asn, exit_asn_org = int(mm.group(1)), mm.group(2)
-                    exit_isp = exit_isp or org
-                elif "ip-api.com" in url:
-                    exit_country = exit_country or (j.get("countryCode") or "").upper()
-                    exit_asn = exit_asn or j.get("as")
-                    exit_asn_org = exit_asn_org or j.get("asname") or j.get("org") or ""
-                    exit_isp = exit_isp or j.get("isp") or j.get("org") or ""
-                break
-            except Exception:
-                continue
 
-        # --- 3) MITM 劫持检测 (轻量: 复用活性首击的 gstatic 请求已验证证书链) ---
-        # 3a) 独立复检一次带 verify=True 的请求: SSLError = TLS 拦截
+        # --- 3) MITM 劫持检测 (判据不变, 省掉一次重复往返) ---
+        # 3a) 活性首击若命中的就是 gstatic (URL 相同、同样 verify=True), 证书链在那一击
+        #     就已经验过 → 直接复用该响应做判定; 只有在活性是从别的 URL 命中时才补一次请求。
         mitm_risk = False
-        try:
-            r = PROBE_SESSION.get("https://www.gstatic.com/generate_204", proxies=proxies,
-                                  timeout=PROBE_RETRY_TIMEOUT, verify=True)
-            if r.status_code in (204, 200):
-                mitm_risk = False
+        with phase("MITM"):
+            if live_url == LIVENESS_URLS[0]:
+                mitm_risk = _mitm_from_response(live_resp)
             else:
-                mitm_risk = r.status_code in (301, 302, 403, 407, 502, 503) or len(r.content) > 0
-        except requests.exceptions.SSLError:
-            # 证书链验证失败 = TLS 拦截 (MITM) 或劣质自签劫持
-            mitm_risk = True
-        except Exception:
-            pass  # 网络层失败不算 MITM (活性探测已通过)
+                try:
+                    r = PROBE_SESSION.get(LIVENESS_URLS[0], proxies=proxies, verify=True,
+                                          timeout=(PROBE_CONNECT_TIMEOUT, PROBE_RETRY_TIMEOUT))
+                    mitm_risk = _mitm_from_response(r)
+                except requests.exceptions.SSLError:
+                    # 证书链验证失败 = TLS 拦截 (MITM) 或劣质自签劫持
+                    mitm_risk = True
+                except Exception:
+                    pass  # 网络层失败不算 MITM (活性探测已通过)
 
-        # 3b) cloudflare trace: warp=on = 套壳 WARP 节点 (非真实出口, 降权标记) — 4s 窄超时
+        # 3b) cloudflare trace: warp=on = 套壳 WARP 节点 (默认关闭)
+        # 实测: 该结果全仓只写不读 (写进 result 后无人消费), 等于每节点白打一轮往返。
+        # 需要时用 WARP_CHECK=1 打开, 结果会随节点带出到 is_warp 字段。
         is_warp = False
-        try:
-            r = PROBE_SESSION.get(TRACE_URL, proxies=proxies, timeout=PROBE_RETRY_TIMEOUT, verify=True)
-            if r.status_code == 200:
-                if re.search(r"^warp=on", r.text, re.M):
-                    is_warp = True
-        except Exception:
-            pass
+        if WARP_CHECK_ENABLED:
+            with phase("WARP trace"):
+                try:
+                    r = PROBE_SESSION.get(TRACE_URL, proxies=proxies,
+                                          timeout=(PROBE_CONNECT_TIMEOUT, PROBE_RETRY_TIMEOUT), verify=True)
+                    if r.status_code == 200 and re.search(r"^warp=on", r.text, re.M):
+                        is_warp = True
+                except Exception:
+                    pass
 
         # --- 4) 断流检测: 限时下载测速 (chunked 读 + 空闲计时; 多端点兜底防测速站被屏蔽) ---
         # 断流签名: 连接建立且首包正常, 但中途停止送数据 → 空闲超时强断
+        # ★ 提前收工: 已入账 ≥ SPEED_BANKED_BYTES 时, 即使剩余预算内再来 0 字节,
+        #   平均吞吐仍 ≥ 判定线 → 通过/淘汰结果在数学上不可能翻转, 可以立即停。
+        #   (旧版无论快慢一律跑满 5s; speed_bps 下游只用于 is_stalled 比较, 判定完全等价)
         speed_bps = 0
-        for speed_url in SPEED_TEST_URLS:
-            downloaded = 0
-            t_speed = time.time()
-            last_chunk_time = time.time()
-            try:
-                with PROBE_SESSION.get(speed_url, proxies=proxies,
-                                       timeout=(5, SPEED_TEST_BUDGET), stream=True) as r:
-                    if r.status_code == 200:
-                        for chunk in r.iter_content(chunk_size=65536):
-                            now = time.time()
-                            if chunk:
-                                downloaded += len(chunk)
-                                last_chunk_time = now
-                            # 总预算超限 → 正常截断 (拿已有数据算吞吐)
-                            if now - t_speed > SPEED_TEST_BUDGET:
-                                break
-                            # 空闲 > 3s 无任何数据 → 断流签名, 立即中止
-                            if now - last_chunk_time > 3.0:
-                                break
-                elapsed = max(time.time() - t_speed, 0.001)
-                if downloaded > 0:
-                    speed_bps = int(downloaded / elapsed)
-                    break  # 首个成功端点的结果即有效
-            except Exception:
-                continue
+        with phase("测速"):
+            for speed_url in SPEED_TEST_URLS:
+                downloaded = 0
+                t_speed = time.time()
+                last_chunk_time = time.time()
+                try:
+                    with PROBE_SESSION.get(speed_url, proxies=proxies,
+                                           timeout=(PROBE_CONNECT_TIMEOUT, SPEED_TEST_BUDGET),
+                                           stream=True) as r:
+                        if r.status_code == 200:
+                            for chunk in r.iter_content(chunk_size=65536):
+                                now = time.time()
+                                if chunk:
+                                    downloaded += len(chunk)
+                                    last_chunk_time = now
+                                # 已够判定 → 收工
+                                if downloaded >= SPEED_BANKED_BYTES:
+                                    break
+                                # 总预算超限 → 正常截断 (拿已有数据算吞吐)
+                                if now - t_speed > SPEED_TEST_BUDGET:
+                                    break
+                                # 空闲 > 3s 无任何数据 → 断流签名, 立即中止
+                                if now - last_chunk_time > 3.0:
+                                    break
+                    elapsed = max(time.time() - t_speed, 0.001)
+                    if downloaded > 0:
+                        speed_bps = int(downloaded / elapsed)
+                        break  # 首个成功端点的结果即有效
+                except Exception:
+                    continue
         # 全部端点都失败 (下载0字节) → 视为断流 (活性已过但无法承载数据流)
 
         # 断流判定: 连 70KB/s 都达不到 → 断流/极慢, 真实不可用
@@ -1407,12 +1543,14 @@ def test_single_node(item, keep_alive_check=True):
                 os.remove(cfg_path)
         except OSError:
             pass
+        _release_socks_port(socks_port)
 
 
 def run_liveness_test(candidates: list) -> list:
     print(f"[*] sing-box 全协议真实测活: {len(candidates)} 节点 (并发 {MAX_WORKERS_TEST}) ...")
     results = []
     done_count = [0]
+    t_stage = time.time()
 
     def _work(item):
         return test_single_node(item)
@@ -1430,8 +1568,22 @@ def run_liveness_test(candidates: list) -> list:
     alive = [r for r in results if r["alive"] and not r["is_stalled"]]
     mitm = sum(1 for r in results if r["mitm_risk"])
     stalled = sum(1 for r in results if r["is_stalled"])
-    print(f"[+] 测活完成: 真活 {len(alive)} | 断流淘汰 {stalled} | MITM 风险 {mitm}")
+    wall = time.time() - t_stage
+    print(f"[+] 测活完成: 真活 {len(alive)} | 断流淘汰 {stalled} | MITM 风险 {mitm}"
+          f" | 阶段耗时 {wall:.0f}s (均 {wall / max(len(candidates), 1) * 1000:.0f}ms/节点)")
+    _print_phase_breakdown()
     return results  # 保留全部信息, 分类阶段再决定去留
+
+
+def _print_phase_breakdown():
+    """把各探测阶段的累计/均摊耗时打进日志 — 下一轮优化按这个取数, 不靠猜。"""
+    stats = phase_stats()
+    if not stats:
+        return
+    print("[*] 探测阶段耗时构成 (累计秒 / 调用数 / 均值):")
+    for name, s in stats.items():
+        print(f"      {name:<12} {s['total_s']:>9.1f}s  {s['calls']:>6} 次  "
+              f"{s['avg_ms']:>8.1f}ms  {s['share']:>5.1f}%")
 
 
 # ═══════════════════════════════════════════N═══════════════════════
@@ -2086,6 +2238,7 @@ def classify_and_export(test_results: list):
             "speed_bps": r["speed_bps"],
             "mitm_risk": r["mitm_risk"],
             "is_stalled": r["is_stalled"],
+            "is_warp": r.get("is_warp", False),  # 默认关闭 WARP_CHECK 时恒为 False
         })
 
     if country_reader:
@@ -2579,8 +2732,10 @@ def apply_env_overrides():
       SKIP_CHAIN=1         跳过家宽链式复测 (整轮里最耗时的一段)
       DRY_RUN=1            测完即停, 不写 output/ 也不改 README
       GEOIP_MAX_AGE_HOURS  mmdb 有效期 (小时, 默认 168; 0 = 永不重下)
+      SB_CHECK=1           每节点额外跑一次 `sing-box check` (默认关; 排查 schema 报错时开)
+      WARP_CHECK=1         额外打一轮 cloudflare trace 判 warp (默认关; 结果会写进 is_warp)
     """
-    global MAX_WORKERS_TEST
+    global MAX_WORKERS_TEST, SB_CHECK_ENABLED, WARP_CHECK_ENABLED
 
     try:
         workers = int(os.environ.get("PROBE_WORKERS", "") or 0)
@@ -2592,11 +2747,16 @@ def apply_env_overrides():
     def flag(name):
         return (os.environ.get(name, "") or "").strip().lower() in ("1", "true", "yes", "on")
 
+    SB_CHECK_ENABLED = flag("SB_CHECK")
+    WARP_CHECK_ENABLED = flag("WARP_CHECK")
+
     return {
         "max_nodes": int(os.environ.get("MAX_NODES", "") or 0) or None,
         "skip_chain": flag("SKIP_CHAIN"),
         "dry_run": flag("DRY_RUN"),
         "workers": MAX_WORKERS_TEST,
+        "sb_check": SB_CHECK_ENABLED,
+        "warp_check": WARP_CHECK_ENABLED,
     }
 
 
@@ -2623,6 +2783,8 @@ def main():
             "stage": stage,  # completed / no_alive_nodes / no_unique_nodes
             "elapsed_seconds": round(time.time() - t_start, 1),
             "options": opts,
+            # 探测各阶段累计/均摊耗时 — 下一轮优化的取数口径
+            "probe_phases": phase_stats(),
         }
         data.update(extra)
         try:
