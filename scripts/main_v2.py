@@ -2467,8 +2467,10 @@ def export_clash_yaml(clash_proxies, filepath):
         "proxies": clash_proxies,
         "proxy-groups": [
             {"name": "PROXIES", "type": "select", "proxies": ["AUTO"] + names},
+            # url-test: 客户端每 2 分钟自测一轮, 死节点自动剔除 —— 免费节点
+            # 寿命是小时级, 订阅 8 小时一刷, 两轮刷新之间靠客户端自愈
             {"name": "AUTO", "type": "url-test", "url": "https://www.gstatic.com/generate_204",
-             "interval": 300, "proxies": names},
+             "interval": 120, "tolerance": 150, "lazy": True, "proxies": names},
         ],
         "rules": ["MATCH,PROXIES"],
     }
@@ -2480,8 +2482,11 @@ def export_singbox_json(sb_nodes, filepath):
     names = [n["tag"] for n in sb_nodes]
     outbounds = sb_nodes + [
         {"type": "selector", "tag": "select", "outbounds": ["auto"] + names},
+        # urltest: 客户端每 3 分钟自测, 死节点自动剔除 (免费节点小时级寿命,
+        # 订阅刷新间隔内靠客户端自愈); tolerance 防抖避免频繁切换
         {"type": "urltest", "tag": "auto", "outbounds": names,
-         "url": "https://www.gstatic.com/generate_204"},
+         "url": "https://www.gstatic.com/generate_204",
+         "interval": "3m", "tolerance": 100},
         {"type": "direct", "tag": "direct"},
         {"type": "block", "tag": "block"},
     ]
@@ -2712,8 +2717,9 @@ export default {{
 1. **自动更新机制**：GitHub Actions 每 {SCHEDULE_HOURS} 小时全自动运行并刷新上述全部订阅与数据。
 2. **测活标准**：节点必须通过 ① 端口预检 ② sing-box 实际隧道 3 个 generate_204 探测 ③ 真实出口 IP 穿透获取 ④ Cloudflare 5MB 限时下载 (吞吐 ≥ 70KB/s) ⑤ TLS 证书校验非 MITM, 方可入库。
 3. **多客户端兼容**：Clash / v2rayN / sing-box 全格式订阅。
-4. **产物与代码分离**：本 README 与 `scripts/` 在 `main` 分支；全部订阅产物在 `{OUTPUT_BRANCH}` 分支（每轮以单个提交整体覆盖），上述链接均指向该分支。
-5. **本地调试**（不必烧 CI）：`MAX_NODES=50 DRY_RUN=1 python scripts/main_v2.py` 只跑 50 个候选且不写产物；另有 `SKIP_CHAIN=1`、`PROBE_WORKERS=<n>`；解析层单测为 `python scripts/test_parsers.py`。
+4. **节点时效说明**：免费节点寿命为小时级（实测相邻两轮出库数波动约 ±30%），两轮刷新之间节点失效是常态。Clash 订阅已内置 `AUTO` 自动测速组（每 2 分钟自测、死节点自动剔除）、sing-box 内置 `auto` urltest（每 3 分钟）——客户端请**选 AUTO / auto 组使用**，不要手动锁定单个节点；v2rayN 请开启「自动选择最快服务器 / 多服务器延迟测试」。
+5. **产物与代码分离**：本 README 与 `scripts/` 在 `main` 分支；全部订阅产物在 `{OUTPUT_BRANCH}` 分支（每轮以单个提交整体覆盖），上述链接均指向该分支。
+6. **本地调试**（不必烧 CI）：`MAX_NODES=50 DRY_RUN=1 python scripts/main_v2.py` 只跑 50 个候选且不写产物；另有 `SKIP_CHAIN=1`、`PROBE_WORKERS=<n>`；解析层单测为 `python scripts/test_parsers.py`。
 """
     with open(os.path.join(BASEDIR, "README.md"), "w", encoding="utf-8") as f:
         f.write(readme)
