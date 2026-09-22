@@ -2610,6 +2610,30 @@ def main():
     opts = apply_env_overrides()
     if any((opts["max_nodes"], opts["skip_chain"], opts["dry_run"], os.environ.get("PROBE_WORKERS"))):
         print(f"[*] 调试开关生效: {opts}")
+
+    def emit_report(stage: str, **extra):
+        """写一份结构化运行报告到 runtime/run_report.json。
+
+        放在 runtime/ (已被 .gitignore 覆盖) 而不是 output/: 它是调试工件,
+        不该混进对外发布的订阅产物里。CI 会把它作为 artifact 上传。
+        每个可能的退出点都调用一次 —— 失败那一轮的现场信息比成功时更有价值。
+        """
+        data = {
+            "finished_at": datetime.now(timezone.utc).isoformat(),
+            "stage": stage,  # completed / no_alive_nodes / no_unique_nodes
+            "elapsed_seconds": round(time.time() - t_start, 1),
+            "options": opts,
+        }
+        data.update(extra)
+        try:
+            os.makedirs(RUNTIME_DIR, exist_ok=True)
+            path = os.path.join(RUNTIME_DIR, "run_report.json")
+            with open(path, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            print(f"[+] 运行报告: {path}")
+        except Exception as e:
+            print(f"[!] 运行报告写入失败 (不影响主流程): {str(e)[:100]}")
+
     ensure_directories()
     setup_environment()
 
@@ -2727,10 +2751,12 @@ def main():
     # 6. 分类 + 导出 (无真活节点时保留上次 output, 不写空订阅覆盖线上数据)
     if not test_results:
         print("[!] 全部节点测活失败 — 保留上次 output, 不覆盖订阅文件")
+        emit_report("no_alive_nodes", fetched=len(raw_nodes), candidates=len(candidates), deduped=len(deduped))
         return
     unique_nodes, residential, non_residential = classify_and_export(test_results)
     if not unique_nodes:
         print("[!] 分类后无存活节点 — 保留上次 output")
+        emit_report("no_unique_nodes", fetched=len(raw_nodes), alive=len(test_results))
         return
     by_proto = {}
     for n in unique_nodes:
@@ -2758,6 +2784,18 @@ def main():
         by_country[n["country"]] = by_country.get(n["country"], 0) + 1
     top_c = sorted(by_country.items(), key=lambda x: -x[1])[:10]
     print(f"国家 Top10: {top_c}")
+
+    emit_report(
+        "completed",
+        stages={"fetched": len(raw_nodes), "parsed": len(candidates),
+                "alive": len(test_results), "unique": len(unique_nodes),
+                "residential": len(residential)},
+        by_protocol=by_proto,
+        by_net_type=by_type,
+        by_country=by_country,
+        top_countries=top_c,
+        published=None if opts["dry_run"] else total,
+    )
 
 
 if __name__ == "__main__":

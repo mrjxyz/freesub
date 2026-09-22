@@ -33,7 +33,11 @@ jobs:
       - name: Cache runtime (sing-box kernel + GeoLite mmdb)
         uses: actions/cache@v4
         with:
-          path: runtime
+          # 只缓存真正要复用的三个文件, 不含 run_report.json 之类的临时产物
+          path: |
+            runtime/sing-box
+            runtime/Country.mmdb
+            runtime/ASN.mmdb
           key: runtime-${{ runner.os }}-${{ steps.wk.outputs.week }}
           restore-keys: runtime-${{ runner.os }}-
 
@@ -57,14 +61,17 @@ jobs:
           # 便于 ip-api 等识别限速; GitHub runner 出口为美国 Azure
           PYTHONUNBUFFERED: '1'
 
-      - name: Upload test artifacts (调试用, 7天保留)
+      # 运行报告由脚本写进 runtime/run_report.json (调试工件, 不进产物分支)。
+      # 旧版这里传的是 output/e2e_test_report.json —— 全仓库没有任何代码生成过它,
+      # 等于挂了个永远空的步骤。现在指向真实文件, 且失败时也保留现场。
+      - name: Upload run report (失败排查用, 7天保留)
         uses: actions/upload-artifact@v4
         if: always()
         with:
           name: run-report
-          path: output/e2e_test_report.json
+          path: runtime/run_report.json
           retention-days: 7
-          if-no-files-found: ignore
+          if-no-files-found: warn
 
       # 产物发布策略: output/ 不进 main —— 全部订阅文件摊平为「单个孤儿提交」
       # force-push 到 output 分支。main 历史停止增长, jsDelivr 的 50MB 仓库上限
