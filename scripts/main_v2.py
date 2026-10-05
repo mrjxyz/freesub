@@ -2389,6 +2389,95 @@ def make_node_name(item, idx, force_residential=False):
     return f"{flag} {cname} {idx:02d}{tag}{risk_tag} - xiaohe"
 
 
+# ══════════════════════════════════════════════════════════════════
+# 发布前终检 (publish gate): 出库前对入选节点再跑一次真实 204 探测
+# ══════════════════════════════════════════════════════════════════
+# 背景: 测活与发布之间存在时间窗 —— 单轮测活本身要跑 ~25 分钟, 而 cron 是 8 小时一轮。
+# 源站 / 优选 IP 在「测活通过之后、用户拉取之前」挂掉 → 订阅里躺着死节点直到下一轮,
+# 用户视角就是「好多无法使用」。典型形态: 同一源站 SNI 被拼成几十个 IP 变体,
+# 源站一死横扫一片 (实测一次 155 节点里 31 个同源于同一个死源站)。
+#
+# 这里只对「即将出库」的节点复测 —— 数量级是百级而非全量 2900, 成本可控。
+# 失败即剔除; 同一 SNI 组失败率高的额外打点, 便于定位源站级故障而不是逐节点瞎猜。
+#
+# 设计底线: 任何异常都原样返回, 绝不比改造前更差。
+
+GATE_ENABLED   = os.environ.get("PUBLISH_GATE", "1") == "1"
+GATE_MAX_NODES = int(os.environ.get("PUBLISH_GATE_MAX", "400"))
+GATE_GROUP_MIN = 3      # 同源站至少这么多节点才做整组判定 (样本太小不妄下结论)
+
+
+def _node_sni(n: dict) -> str:
+    """取节点源站标识: 优先 URI 里的 sni/peer/host, 退化为 server。
+
+    用于源站级健康度分组 —— 同一源站往往共享 uuid 与 path,
+    判定要按源站而不是按 IP, 否则永远看不到「整组全灭」这个信号。
+    """
+    raw = n.get("raw") or ""
+    m = re.search(r"[?&](?:sni|peer|host)=([^&#]+)", raw)
+    if m:
+        try:
+            return urllib.parse.unquote(m.group(1)).lower()
+        except Exception:
+            return m.group(1).lower()
+    return (n.get("server") or "").lower()
+
+
+def final_publish_gate(unique_nodes, residential, non_residential):
+    """出库前复检。返回过滤后的 (unique_nodes, residential, non_residential)。"""
+    if not GATE_ENABLED or not unique_nodes:
+        return unique_nodes, residential, non_residential
+
+    todo = unique_nodes[:GATE_MAX_NODES]
+    print(f"[*] 发布前终检: 对出库 {len(todo)} 节点复测 (gstatic 204) ...")
+    t0 = time.time()
+    keep, dead = [], []
+
+    try:
+        def _one(n):
+            ob = n.get("outbound") or (parse_node_uri(n["raw"]) or [None])[0]
+            if not ob:
+                return n, False
+            r = test_single_node((n["raw"], ob, n["server"], n["port"], n["proto"]),
+                                 keep_alive_check=False)
+            return n, bool(r and r.get("alive") and not r.get("is_stalled"))
+
+        with ThreadPoolExecutor(max_workers=min(MAX_WORKERS_TEST, 32)) as ex:
+            for n, ok in ex.map(_one, todo):
+                (keep if ok else dead).append(n)
+    except Exception as e:
+        print(f"[!] 发布前终检异常, 跳过 (保持原样出库): {e}")
+        return unique_nodes, residential, non_residential
+
+    # ── 源站级健康度: 同一 SNI 组挂了几成 ──
+    grp_total, grp_dead = {}, {}
+    for n in todo:
+        s = _node_sni(n)
+        grp_total[s] = grp_total.get(s, 0) + 1
+    for n in dead:
+        s = _node_sni(n)
+        grp_dead[s] = grp_dead.get(s, 0) + 1
+    worst = sorted(
+        ((s, grp_dead.get(s, 0), grp_total[s]) for s in grp_total
+         if grp_total[s] >= GATE_GROUP_MIN and grp_dead.get(s, 0)),
+        key=lambda x: -(x[1] / x[2]))
+    if worst:
+        print("[!] 源站级故障 (同 SNI 组失败率):")
+        for s, d, t in worst[:8]:
+            print(f"      {d}/{t} 失败 ({int(d / t * 100)}%)  {s}")
+
+    if dead:
+        dead_raws = {n.get("raw") for n in dead}
+        residential = [n for n in residential if n.get("raw") not in dead_raws]
+        non_residential = [n for n in non_residential if n.get("raw") not in dead_raws]
+        print(f"[+] 发布前终检: 剔除 {len(dead)} 个 (出库 {len(todo)} → {len(keep)}) "
+              f"| 耗时 {time.time() - t0:.0f}s")
+        return keep, residential, non_residential
+
+    print(f"[+] 发布前终检: 全部 {len(todo)} 个存活 | 耗时 {time.time() - t0:.0f}s")
+    return unique_nodes, residential, non_residential
+
+
 def export_all(unique_nodes, residential, non_residential):
     ensure_directories()
 
@@ -2922,6 +3011,9 @@ def main():
         emit_report("no_alive_nodes", fetched=len(raw_nodes), candidates=len(candidates), deduped=len(deduped))
         return
     unique_nodes, residential, non_residential = classify_and_export(test_results)
+    # 6.5 ★ 发布前终检: 出库前复测一轮, 剔除「测活之后才挂掉」的节点
+    unique_nodes, residential, non_residential = final_publish_gate(
+        unique_nodes, residential, non_residential)
     if not unique_nodes:
         print("[!] 分类后无存活节点 — 保留上次 output")
         emit_report("no_unique_nodes", fetched=len(raw_nodes), alive=len(test_results))
