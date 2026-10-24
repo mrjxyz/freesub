@@ -1837,7 +1837,10 @@ def classify_network_type(ip: str, country: str, asn, org: str, ip_api_rec: dict
 def outbound_to_clash(node: dict, name: str) -> dict:
     """sing-box outbound → Clash (Meta/mihomo) proxy dict"""
     t = node.get("type")
-    server, port = node["server"], node["server_port"]
+    # 缺 server/server_port 的畸形节点直接跳过（返回 None，调用方已 if cp: 兜住）
+    server, port = node.get("server"), node.get("server_port")
+    if not server or not port:
+        return None
     proxy = {"name": name, "server": server, "port": port, "udp": True}
 
     if t == "vless":
