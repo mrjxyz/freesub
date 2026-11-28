@@ -1,0 +1,226 @@
+{
+  "log": {
+    "level": "warn"
+  },
+  "outbounds": [
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 01 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9040,
+      "method": "aes-256-cfb",
+      "password": "p9z5BVADH2YFs3MN"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 02 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9030,
+      "method": "aes-256-cfb",
+      "password": "GeregetR8cvQHzYr"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 03 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9001,
+      "method": "aes-256-cfb",
+      "password": "UkXRsXvR6buDMG2Y"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 04 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9025,
+      "method": "aes-256-cfb",
+      "password": "XPtzA9sCug3SPR4c"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 05 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9020,
+      "method": "aes-256-cfb",
+      "password": "BNmAXXxAHYpTRdzu"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 06 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9000,
+      "method": "aes-256-cfb",
+      "password": "a3GFYt36Sm82Vys9"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 07 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9011,
+      "method": "aes-256-cfb",
+      "password": "M3t2ZEQcMGRWBjRa"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 08 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9005,
+      "method": "aes-256-cfb",
+      "password": "ZET59LF6DvCC8KVt"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 09 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9054,
+      "method": "aes-256-cfb",
+      "password": "VcFuyXvND2yQWSFY"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 10 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9029,
+      "method": "aes-256-cfb",
+      "password": "dU3DSNS8wYPXzEKw"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 11 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9041,
+      "method": "aes-256-cfb",
+      "password": "U6qnYRhfyDmn8sgn"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 12 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9019,
+      "method": "aes-256-cfb",
+      "password": "GA9KzeEgvfxNrgmM"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 13 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9014,
+      "method": "aes-256-cfb",
+      "password": "KnJGad3FqTvjqbaX"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 14 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9042,
+      "method": "aes-256-cfb",
+      "password": "S7KwUu7yBy58S3Ga"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 15 - xiaohe",
+      "server": "5.188.181.201",
+      "server_port": 9027,
+      "method": "aes-256-cfb",
+      "password": "EXN3S3eQpjE7EJu8"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 16 - xiaohe",
+      "server": "108.181.121.170",
+      "server_port": 443,
+      "method": "chacha20-ietf-poly1305",
+      "password": "qItG8SueYQcP"
+    },
+    {
+      "type": "shadowsocks",
+      "tag": "🇪🇸 西班牙 (Spain) 17 - xiaohe",
+      "server": "85.155.226.213",
+      "server_port": 2089,
+      "method": "chacha20-ietf-poly1305",
+      "password": "DVlt-OeAV4RiLMwT9e0T72nnFtMG2W3o"
+    },
+    {
+      "type": "vless",
+      "tag": "🇪🇸 西班牙 (Spain) 18 - xiaohe",
+      "server": "196.196.149.80",
+      "server_port": 443,
+      "uuid": "4201786b-d99b-4147-a5f0-20d47acddb81",
+      "tls": {
+        "enabled": true,
+        "server_name": "b3cd32g.es1.h1clayd.click",
+        "utls": {
+          "enabled": true,
+          "fingerprint": "firefox"
+        },
+        "reality": {
+          "enabled": true,
+          "public_key": "7efBhLzPwoTtEC1GlukCdiTllobUfa2_XuAKNSLJx30",
+          "short_id": "e7cffac9f8cfb434"
+        }
+      },
+      "transport": {
+        "type": "grpc"
+      }
+    },
+    {
+      "type": "selector",
+      "tag": "select",
+      "outbounds": [
+        "auto",
+        "🇪🇸 西班牙 (Spain) 01 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 02 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 03 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 04 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 05 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 06 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 07 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 08 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 09 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 10 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 11 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 12 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 13 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 14 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 15 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 16 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 17 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 18 - xiaohe"
+      ]
+    },
+    {
+      "type": "urltest",
+      "tag": "auto",
+      "outbounds": [
+        "🇪🇸 西班牙 (Spain) 01 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 02 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 03 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 04 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 05 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 06 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 07 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 08 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 09 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 10 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 11 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 12 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 13 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 14 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 15 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 16 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 17 - xiaohe",
+        "🇪🇸 西班牙 (Spain) 18 - xiaohe"
+      ],
+      "url": "https://www.gstatic.com/generate_204",
+      "interval": "3m",
+      "tolerance": 100
+    },
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "type": "block",
+      "tag": "block"
+    }
+  ]
+}
